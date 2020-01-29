@@ -6,6 +6,7 @@ import com.acmerobotics.dashboard.telemetry.MultipleTelemetry;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.hardware.TouchSensor;
 
 import static org.firstinspires.ftc.teamcode.RoboMath.MMToInchKt.mmToInch;
 
@@ -33,6 +34,8 @@ import static org.firstinspires.ftc.teamcode.RoboMath.MMToInchKt.mmToInch;
         public static double kd = 0.0;
 
         public DcMotor lift     = null;
+        public TouchSensor down = null;
+        public TouchSensor up = null;
 
         public PIDController pid = new PIDController(kp, ki, kd);
 
@@ -68,6 +71,9 @@ import static org.firstinspires.ftc.teamcode.RoboMath.MMToInchKt.mmToInch;
             lift = hardwareMap.get(DcMotor.class, "lift");
             lift.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
             lift.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+
+            down = hardwareMap.get(TouchSensor.class, "down");
+            up = hardwareMap.get(TouchSensor.class, "up");
 
             mmToInch(lead);
 
@@ -108,7 +114,19 @@ import static org.firstinspires.ftc.teamcode.RoboMath.MMToInchKt.mmToInch;
             //output = error * kp;
             output = pid.calculate(error);
 
-            lift.setPower(output);
+            if(!down.isPressed() && !up.isPressed()) {
+                lift.setPower(output);
+            }
+            else if(down.isPressed() && output < 0){
+                lift.setPower(0);
+            }
+            else if(up.isPressed() && output > 0){
+                lift.setPower(0);
+            }
+            else{
+                telemetry.addLine("Argh! SOmethign wrng");
+                telemetry.update();
+            }
 
             telemetry.addData("Encoder target: ", distance);
             telemetry.addData("Error: ", error);
