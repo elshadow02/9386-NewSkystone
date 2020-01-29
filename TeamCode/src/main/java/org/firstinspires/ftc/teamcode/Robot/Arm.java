@@ -6,6 +6,8 @@ import com.qualcomm.robotcore.hardware.Gamepad;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.util.Range;
 
+
+
 import org.firstinspires.ftc.teamcode.PIDControl.PIDController;
 
 public class Arm {
@@ -22,7 +24,7 @@ public class Arm {
 
     private double maxPower = 1;
 
-    private MotorMode mode = MotorMode.STOP;
+    private Modes.MotorMode mode = Modes.MotorMode.STOP;
 
     private Gamepad gamepad = null;
 
@@ -38,11 +40,11 @@ public class Arm {
         gamepad = pad;
     }
 
-    public void setMode(MotorMode mode){
+    public void setMode(Modes.MotorMode mode){
         this.mode = mode;
     }
 
-    public MotorMode getMode(){
+    public Modes.MotorMode getMode(){
         return mode;
     }
 
@@ -89,12 +91,12 @@ public class Arm {
 
     public void update(){
         if(gamepad.dpad_right){
-            setMode(MotorMode.RUN_TO_POSITION);
+            setMode(Modes.MotorMode.RUN_TO_POSITION);
             armIntakePosition = true;
         }
 
         if(gamepad.dpad_left){
-            setMode(MotorMode.RUN_TO_POSITION);
+            setMode(Modes.MotorMode.RUN_TO_POSITION);
             armIntakePosition = false;
         }
 

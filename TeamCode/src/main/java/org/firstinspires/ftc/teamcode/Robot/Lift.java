@@ -9,8 +9,6 @@ import com.qualcomm.robotcore.util.Range;
 
 import org.firstinspires.ftc.teamcode.PIDControl.PIDController;
 
-import static org.firstinspires.ftc.teamcode.RoboMath.MMToInchKt.mmToInch;
-
 public class Lift {
     private DcMotor lift = null;
     public TouchSensor down = null;
@@ -24,7 +22,7 @@ public class Lift {
 
     private double maxPower = 1;
 
-    private MotorMode mode = MotorMode.STOP;
+    private Modes.MotorMode mode = Modes.MotorMode.STOP;
 
     private Gamepad gamepad = null;
 
@@ -62,11 +60,11 @@ public class Lift {
         gamepad = pad;
     }
 
-    public void setMode(MotorMode mode){
+    public void setMode(Modes.MotorMode mode){
         this.mode = mode;
     }
 
-    public MotorMode getMode(){
+    public Modes.MotorMode getMode(){
         return mode;
     }
 
@@ -132,12 +130,12 @@ public class Lift {
         }
 
         if(gamepad.dpad_up){
-            setMode(MotorMode.RUN_TO_POSITION);
+            setMode(Modes.MotorMode.RUN_TO_POSITION);
         }
 
         if(gamepad.dpad_down){
             liftPosition = 1;
-            setMode(MotorMode.RUN_TO_POSITION);
+            setMode(Modes.MotorMode.RUN_TO_POSITION);
         }
 
         switch(mode){
@@ -161,6 +159,10 @@ public class Lift {
             case STOP:
                 setPower(0);
         }
+    }
+
+    public void mmToInch(double x){
+        x = x / 25.4;
     }
 
 }
