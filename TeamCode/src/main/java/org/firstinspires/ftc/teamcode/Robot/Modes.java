@@ -1,9 +1,9 @@
 package org.firstinspires.ftc.teamcode.Robot;
 
 public class Modes {
-    public enum MotorMode {
-        RUN_TO_POSITION, CONTROLLED, STOP
-    }
+//    public enum MotorMode {
+//        RUN_TO_POSITION, CONTROLLED, STOP
+//    }
 
     public enum DriveMode{
         MECANUM, TANK, COOL_MECANUM, TURTLE_SPEED, STOP

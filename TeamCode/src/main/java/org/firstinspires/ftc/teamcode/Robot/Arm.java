@@ -24,7 +24,7 @@ public class Arm {
 
     private double maxPower = 1;
 
-    private Modes.MotorMode mode = Modes.MotorMode.STOP;
+    private MotorMode mode = MotorMode.STOP;
 
     private Gamepad gamepad = null;
 
@@ -42,11 +42,11 @@ public class Arm {
         this.gamepad = opmode.gamepad2;
     }
 
-    public void setMode(Modes.MotorMode mode){
+    public void setMode(MotorMode mode){
         this.mode = mode;
     }
 
-    public Modes.MotorMode getMode(){
+    public MotorMode getMode(){
         return mode;
     }
 
@@ -93,12 +93,12 @@ public class Arm {
 
     public void update(){
         if(gamepad.dpad_right){
-            setMode(Modes.MotorMode.RUN_TO_POSITION);
+            setMode(MotorMode.RUN_TO_POSITION);
             armIntakePosition = true;
         }
 
         if(gamepad.dpad_left){
-            setMode(Modes.MotorMode.RUN_TO_POSITION);
+            setMode(MotorMode.RUN_TO_POSITION);
             armIntakePosition = false;
         }
 

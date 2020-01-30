@@ -22,7 +22,7 @@ public class Lift {
 
     private double maxPower = 1;
 
-    private Modes.MotorMode mode = Modes.MotorMode.STOP;
+    private MotorMode mode = MotorMode.STOP;
 
     private Gamepad gamepad = null;
 
@@ -62,11 +62,11 @@ public class Lift {
         gamepad = opmode.gamepad2;
     }
 
-    public void setMode(Modes.MotorMode mode){
+    public void setMode(MotorMode mode){
         this.mode = mode;
     }
 
-    public Modes.MotorMode getMode(){
+    public MotorMode getMode(){
         return mode;
     }
 
@@ -134,12 +134,12 @@ public class Lift {
         }
 
         if(gamepad.dpad_up){
-            setMode(Modes.MotorMode.RUN_TO_POSITION);
+            setMode(MotorMode.RUN_TO_POSITION);
         }
 
         if(gamepad.dpad_down){
             liftPosition = 1;
-            setMode(Modes.MotorMode.RUN_TO_POSITION);
+            setMode(MotorMode.RUN_TO_POSITION);
         }
 
         if(Math.abs(gamepad.left_stick_y ) > 0.1 && mode != MotorMode.CONTROLLED){
