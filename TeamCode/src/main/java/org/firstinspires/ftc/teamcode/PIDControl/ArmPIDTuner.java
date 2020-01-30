@@ -3,9 +3,13 @@ package org.firstinspires.ftc.teamcode.PIDControl;
 import com.acmerobotics.dashboard.FtcDashboard;
 import com.acmerobotics.dashboard.config.Config;
 import com.acmerobotics.dashboard.telemetry.MultipleTelemetry;
+import com.acmerobotics.roadrunner.control.PIDCoefficients;
+import com.acmerobotics.roadrunner.control.PIDFController;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.hardware.DcMotorEx;
+import com.qualcomm.robotcore.util.Range;
 
 /*
  * Created by Ethan L. 1-28-2020
@@ -29,7 +33,7 @@ import com.qualcomm.robotcore.hardware.DcMotor;
         public static double ki = 0.0;
         public static double kd = 0.0;
 
-        public DcMotor arm      = null;
+        public DcMotorEx arm      = null;
 
         public PIDController pid = new PIDController(kp, ki, kd);
 
@@ -46,11 +50,12 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 
         public int loopCount = 0;
 
+        public PIDFController pidf = new PIDFController(new PIDCoefficients(kp, ki, kd));
 
         @Override // @Override tells the computer we intend to override OpMode's method init()
         public void init() {
             telemetry = new MultipleTelemetry(telemetry, FtcDashboard.getInstance().getTelemetry());
-            arm = hardwareMap.get(DcMotor.class, "arm");
+            arm = (DcMotorEx)hardwareMap.get(DcMotor.class, "arm");
             arm.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
             arm.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
 
@@ -67,6 +72,8 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 
             telemetry.addData("Distance to travel: ", travel);
             telemetry.addData("Encoder Value: ", arm.getCurrentPosition());
+            telemetry.addData("Error: ", pidf.getLastError());
+            telemetry.addData("The Target: ", pidf.getTargetPosition());
             telemetry.update();
 
             if (start == 1){
@@ -75,27 +82,36 @@ import com.qualcomm.robotcore.hardware.DcMotor;
         }
 
         public void setPosition(double angle){
-            angle *= ticksPerAngle;
+            pidf.setTargetPosition(angle*ticksPerAngle);
 
-            double output;
-
-            double error;
+            double outputf = pidf.update(arm.getCurrentPosition());
 
 
-            error = angle - (arm.getCurrentPosition() - startMotorPos);
 
-            //output = error * kp;
-            output = pid.calculate(error);
+            arm.setPower(Range.clip(outputf, -1.0, -1.0));
 
-            arm.setPower(output);
+
+//            angle *= ticksPerAngle;
+//
+//            double output;
+//
+//            double error;
+//
+//
+//            error = angle - (arm.getCurrentPosition() - startMotorPos);
+//
+//            //output = error * kp;
+//            output = pid.calculate(error);
+//
+//            arm.setPower(output);
 
             telemetry.addData("Encoder target: ", angle);
-            telemetry.addData("Error: ", error);
-            telemetry.addData("Output: ", output);
+            telemetry.addData("Error: ", pidf.getLastError());
+            telemetry.addData("Output: ", outputf);
             telemetry.addData("kp: ", kp);
             telemetry.addData("ki: ", ki);
             telemetry.addData("kd: ", kd);
-            telemetry.addData("loop count: ", loopCount);
+            telemetry.addData("Target: ", pidf.getTargetPosition());
             telemetry.update();
             loopCount += 1;
         }

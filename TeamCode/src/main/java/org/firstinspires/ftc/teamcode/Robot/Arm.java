@@ -28,14 +28,16 @@ public class Arm {
 
     private boolean armIntakePosition = true;
 
-    public Arm(HardwareMap hwMap, Gamepad pad){
+    public Arm(HardwareMap hwMap, OpMode opmode){
         arm = hwMap.get(DcMotor.class, "arm");
         arm.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         arm.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
 
         ticksPerAngle = (arm.getMotorType().getTicksPerRev()*gearRatio)/360;
 
-        gamepad = pad;
+        this.opMode = opmode;
+
+        this.gamepad = opmode.gamepad2;
     }
 
     public void setMode(MotorMode mode){
@@ -98,6 +100,10 @@ public class Arm {
             armIntakePosition = false;
         }
 
+        if(Math.abs(gamepad.right_stick_y) > 0.1 && mode != MotorMode.CONTROLLED){
+            mode = MotorMode.CONTROLLED;
+        }
+
         switch(mode){
             case RUN_TO_POSITION:
                 if(armIntakePosition == true){
@@ -107,7 +113,7 @@ public class Arm {
                     stack();
                 }
             case CONTROLLED:
-                setPower(-gamepad.right_stick_y);
+                setPower(-gamepad.right_stick_y * maxPower);
             case STOP:
                 setPower(0);
         }

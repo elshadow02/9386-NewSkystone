@@ -45,7 +45,7 @@ public class Lift {
 
     public double screwTicksPerInch = 1;
 
-    public Lift(HardwareMap hwMap, Gamepad pad){
+    public Lift(HardwareMap hwMap, OpMode opmode){
         lift = hwMap.get(DcMotor.class, "lift");
         lift.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         lift.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
@@ -59,7 +59,9 @@ public class Lift {
 
         ticksPerInch = screwTicksPerInch * screwMovementPerLiftInch;
 
-        gamepad = pad;
+        this.opMode = opmode;
+
+        gamepad = opmode.gamepad2;
     }
 
     public void setMode(MotorMode mode){
@@ -92,8 +94,10 @@ public class Lift {
     }
 
     public void nextPosition(){
-        setDistance(225);
+        setDistance(liftPosition*7);
     }
+
+    public void initPosition() { setDistance(2);}
 
     public void setDistance(double distance){
         distance *= ticksPerInch;
@@ -140,6 +144,10 @@ public class Lift {
             setMode(MotorMode.RUN_TO_POSITION);
         }
 
+        if(Math.abs(gamepad.left_stick_y ) > 0.1 && mode != MotorMode.CONTROLLED){
+            mode = MotorMode.CONTROLLED;
+        }
+
         switch(mode){
             case RUN_TO_POSITION:
                 if(liftPosition == 0){
@@ -156,8 +164,10 @@ public class Lift {
                     lift.setPower(0);
                 }
                 else{
-                    lift.setPower(-gamepad.left_stick_y);
+                    lift.setPower(-gamepad.left_stick_y * maxPower);
                 }
+            case PREMATCH:
+                initPosition();
             case STOP:
                 setPower(0);
         }

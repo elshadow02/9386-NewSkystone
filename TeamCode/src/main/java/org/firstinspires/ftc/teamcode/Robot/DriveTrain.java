@@ -4,6 +4,7 @@ import android.support.annotation.NonNull;
 
 import com.acmerobotics.roadrunner.control.PIDCoefficients;
 import com.qualcomm.hardware.bosch.BNO055IMU;
+import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorControllerEx;
 import com.qualcomm.robotcore.hardware.Gamepad;
@@ -35,7 +36,8 @@ public class DriveTrain extends SampleMecanumDriveBase {
     private List<ExpansionHubMotor> motors;
     private BNO055IMU imu;
     private DriveMode driveMode = DriveMode.STOP;
-    private Gamepad gamepad = null;
+    //private Gamepad gamepad = null;
+    private OpMode opMode = null;
     private double forward, strafe, rotate;
     private double frontLeftSpeed, frontRightSpeed, backLeftSpeed, backRightSpeed;
     private double speedAngle, joystickAngle, angleChange;
@@ -75,7 +77,7 @@ public class DriveTrain extends SampleMecanumDriveBase {
         rightRear.setDirection(DcMotor.Direction.REVERSE);
     }
 
-    public DriveTrain(HardwareMap hardwareMap, Gamepad pad) {
+    public DriveTrain(HardwareMap hardwareMap, OpMode opmode) {
         super();
 
         LynxModuleUtil.ensureMinimumFirmwareVersion(hardwareMap);
@@ -107,6 +109,8 @@ public class DriveTrain extends SampleMecanumDriveBase {
 
         rightFront.setDirection(DcMotor.Direction.REVERSE);
         rightRear.setDirection(DcMotor.Direction.REVERSE);
+
+        this.opMode = opmode;
     }
 
     @Override
@@ -187,9 +191,9 @@ public class DriveTrain extends SampleMecanumDriveBase {
     public void stateUpdate(){
         switch(driveMode){
             case MECANUM:
-                rotate = gamepad.right_stick_x;
-                forward = -gamepad.left_stick_y;
-                strafe = gamepad.left_stick_x;
+                rotate = opMode.gamepad1.right_stick_x;
+                forward = -opMode.gamepad1.left_stick_y;
+                strafe = opMode.gamepad1.left_stick_x;
 
                 frontLeftSpeed = forward + rotate + strafe;
                 frontRightSpeed = forward - rotate - strafe;
@@ -210,9 +214,9 @@ public class DriveTrain extends SampleMecanumDriveBase {
 
                 setMotorPowers(frontLeftSpeed, backLeftSpeed, backRightSpeed, frontRightSpeed);
             case TANK:
-                setMotorPowers(-gamepad.left_stick_y, -gamepad.left_stick_y, -gamepad.right_stick_y, -gamepad.right_stick_y);
+                setMotorPowers(-opMode.gamepad1.left_stick_y, -opMode.gamepad1.left_stick_y, -opMode.gamepad1.right_stick_y, -opMode.gamepad1.right_stick_y);
             case COOL_MECANUM:
-                joystickAngle = Math.atan2(-gamepad.left_stick_y, gamepad.left_stick_x);
+                joystickAngle = Math.atan2(-opMode.gamepad1.left_stick_y, opMode.gamepad1.left_stick_x);
 
                 //Defines angleChange variable as the x-value received from the imu.
                 angleChange = imu.getAngularOrientation().firstAngle;
@@ -220,22 +224,22 @@ public class DriveTrain extends SampleMecanumDriveBase {
                 speedAngle = joystickAngle - angleChange;
 
                 //Gets the rotational value for our drive.
-                rotate = gamepad.right_stick_x;
+                rotate = opMode.gamepad1.right_stick_x;
 
                 double dampner;
 
-                if (Math.abs(gamepad.left_stick_x) > Math.abs(gamepad.left_stick_y)) {
-                    dampner = Math.abs(gamepad.left_stick_x);
-                } else if (Math.abs(gamepad.left_stick_y) > Math.abs(gamepad.left_stick_x)) {
-                    dampner = Math.abs(gamepad.left_stick_y);
+                if (Math.abs(opMode.gamepad1.left_stick_x) > Math.abs(opMode.gamepad1.left_stick_y)) {
+                    dampner = Math.abs(opMode.gamepad1.left_stick_x);
+                } else if (Math.abs(opMode.gamepad1.left_stick_y) > Math.abs(opMode.gamepad1.left_stick_x)) {
+                    dampner = Math.abs(opMode.gamepad1.left_stick_y);
                 } else {
-                    dampner = Math.abs(gamepad.left_stick_y);
+                    dampner = Math.abs(opMode.gamepad1.left_stick_y);
                 }
 
                 //Make sure that the absolute value of either the y- or x-value of the joystick is greater than 0.1.
                 //Because speedAngle will never produce an angle where the sine and cosine of that angle equals 0,
                 //we need to make sure that the robot does not move unless the joystick is pressed.
-                if (Math.abs(gamepad.left_stick_y) > 0.1 || Math.abs(gamepad.left_stick_x) > 0.1) {
+                if (Math.abs(opMode.gamepad1.left_stick_y) > 0.1 || Math.abs(opMode.gamepad1.left_stick_x) > 0.1) {
 
                     forward = Math.sin(speedAngle);
                     strafe = Math.cos(speedAngle);
@@ -263,9 +267,9 @@ public class DriveTrain extends SampleMecanumDriveBase {
                 }
 
             case TURTLE_SPEED:
-                rotate = gamepad.right_stick_x;
-                forward = -gamepad.left_stick_y;
-                strafe = gamepad.left_stick_x;
+                rotate = opMode.gamepad1.right_stick_x;
+                forward = -opMode.gamepad1.left_stick_y;
+                strafe = opMode.gamepad1.left_stick_x;
 
                 frontLeftSpeed = forward + rotate + strafe;
                 frontRightSpeed = forward - rotate - strafe;
