@@ -8,8 +8,6 @@ import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.TouchSensor;
 
-import static org.firstinspires.ftc.teamcode.RoboMath.MMToInchKt.mmToInch;
-
 /*
  * Created by Ethan L. 1-28-2020
  *
@@ -21,7 +19,7 @@ import static org.firstinspires.ftc.teamcode.RoboMath.MMToInchKt.mmToInch;
  * Adjust the PID variables until the current position reaches the target without oscillation.
  */
 
-@TeleOp(name="PIDTuner")
+@TeleOp(name="LiftPID")
 @Config
     public class LiftPIDTuner extends OpMode {
 
@@ -137,6 +135,10 @@ import static org.firstinspires.ftc.teamcode.RoboMath.MMToInchKt.mmToInch;
             telemetry.addData("loop count: ", loopCount);
             telemetry.update();
             loopCount += 1;
+        }
+
+        public void mmToInch(double x){
+            x = x/25.4;
         }
 
     }

@@ -21,7 +21,7 @@ import com.qualcomm.robotcore.util.Range;
  * the PID variables until the current position reaches the target without oscillation.
  */
 
-@TeleOp(name="PIDTuner")
+@TeleOp(name="ArmPID")
 @Config
     public class ArmPIDTuner extends OpMode {
 
