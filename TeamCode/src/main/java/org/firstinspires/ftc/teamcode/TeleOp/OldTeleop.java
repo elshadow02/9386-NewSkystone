@@ -114,8 +114,7 @@ public class OldTeleop extends LinearOpMode {
                 robot.foundationLeft.setPosition(0);
             }
             if (gamepad1.b){
-                robot.foundationRight.setPosition(0
-                );
+                robot.foundationRight.setPosition(0);
             }
 
             if (gamepad1.dpad_up){
