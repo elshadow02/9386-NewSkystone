@@ -2,8 +2,10 @@ package org.firstinspires.ftc.teamcode.Robot;
 
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.Gamepad;
 import com.qualcomm.robotcore.hardware.HardwareMap;
+import com.qualcomm.robotcore.hardware.PIDFCoefficients;
 import com.qualcomm.robotcore.util.Range;
 
 
@@ -11,18 +13,16 @@ import com.qualcomm.robotcore.util.Range;
 import org.firstinspires.ftc.teamcode.PIDControl.PIDController;
 
 public class Arm {
-    private DcMotor arm = null;
+    private DcMotorEx arm = null;
     private OpMode opMode = null;
     private double armStartPos = 0;
 
-    private PIDController pid = new PIDController(0, 0, 0);
-
-    private static double gearRatio = 1;
+    private static double gearRatio = 2;
 
     //Motor encoder ticks per angle of rotation
     private double ticksPerAngle = 1;
 
-    private double maxPower = 1;
+    private double maxPower = 0.5;
 
     private MotorMode mode = MotorMode.STOP;
 
@@ -31,7 +31,7 @@ public class Arm {
     private boolean armIntakePosition = true;
 
     public Arm(HardwareMap hwMap, OpMode opmode){
-        arm = hwMap.get(DcMotor.class, "arm");
+        arm = (DcMotorEx)hwMap.get(DcMotor.class, "arm");
         arm.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         arm.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
 
@@ -40,6 +40,8 @@ public class Arm {
         this.opMode = opmode;
 
         this.gamepad = opmode.gamepad2;
+
+        arm.setPIDFCoefficients(DcMotor.RunMode.RUN_TO_POSITION, new PIDFCoefficients(6, 0, 0, 0));
     }
 
     public void setMode(MotorMode mode){
@@ -50,8 +52,8 @@ public class Arm {
         return mode;
     }
 
-    private void setPower(double v){
-        arm.setPower(v * maxPower);
+    public void setPower(double v){
+        arm.setPower(v);
 
     }
 
@@ -67,28 +69,31 @@ public class Arm {
         return maxPower;
     }
 
-    private void intake(){
+    public void intake(){
         setAngle(0);
     }
 
     public void stack(){
-        setAngle(225);
+        setAngle(180);
     }
 
     public void setAngle(double angle){
-        angle *= ticksPerAngle;
+        if(getMode() == MotorMode.RUN_TO_POSITION || getMode() == MotorMode.AUTO) {
+            int newAngle = (int) (angle * ticksPerAngle);
 
-        double output;
+            arm.setTargetPosition(newAngle);
 
-        double error;
+            if (arm.getMode() != DcMotor.RunMode.RUN_TO_POSITION) {
+                arm.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+            }
 
 
-        error = angle - arm.getCurrentPosition();
-
-        //output = error * kp;
-        output = pid.calculate(error);
-
-        arm.setPower(output * maxPower);
+            if ((arm.getTargetPosition() - arm.getCurrentPosition()) < 325) {
+                arm.setPower(0.2);
+            } else {
+                arm.setPower(maxPower);
+            }
+        }
     }
 
     public void update(){
@@ -107,6 +112,8 @@ public class Arm {
         }
 
         switch(mode){
+            case AUTO:
+
             case RUN_TO_POSITION:
                 if(armIntakePosition == true){
                     intake();
@@ -114,10 +121,19 @@ public class Arm {
                 if(armIntakePosition == false){
                     stack();
                 }
+                break;
             case CONTROLLED:
+                if (arm.getMode() != DcMotor.RunMode.RUN_USING_ENCODER) {
+                    arm.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+                }
                 setPower(-gamepad.right_stick_y * maxPower);
+                break;
             case STOP:
+                if (arm.getMode() != DcMotor.RunMode.RUN_USING_ENCODER) {
+                    arm.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+                }
                 setPower(0);
+                break;
         }
     }
 

@@ -20,8 +20,6 @@ public class StateTest extends LinearOpMode {
         telemetry.addLine("Init Complete");
         telemetry.update();
 
-        drive.setPoseEstimate(new Pose2d());
-
         Trajectory trajectory = drive.trajectoryBuilder()
                 .forward(24)
                 .build();
@@ -29,21 +27,42 @@ public class StateTest extends LinearOpMode {
         Trajectory traj = drive.trajectoryBuilder()
                 .splineTo(new Pose2d(40.0, 40.0, 0)).build();
 
+        drive.setDriveMode(DriveMode.STOP);
+
+        drive.setPoseEstimate(new Pose2d());
+
         waitForStart();
 
         while (opModeIsActive()) {
 
-            if (gamepad1.left_bumper){
-                drive.turnSync(Math.toRadians(90));
+            if (gamepad1.a){
+                drive.setDriveMode(DriveMode.MECANUM);
             }
 
-            if(gamepad1.a){
-                drive.followTrajectorySync(trajectory);
+            if (gamepad1.b){
+                drive.setDriveMode(DriveMode.TURTLE_SPEED);
+            }
+
+            if (gamepad1.x){
+                drive.setDriveMode(DriveMode.COOL_MECANUM);
+            }
+
+            if (gamepad1.y){
+                drive.setDriveMode(DriveMode.TANK);
             }
 
             if (gamepad1.right_bumper){
-                drive.followTrajectorySync(traj);
+                drive.setDriveMode(DriveMode.STOP);
             }
+
+            if (gamepad1.left_bumper){
+                drive.turnSync(Math.PI);
+            }
+
+            drive.stateUpdate();
+
+            telemetry.addData("Mode", drive.getDriveMode());
+            telemetry.update();
 
         }
     }

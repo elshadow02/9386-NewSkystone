@@ -4,6 +4,7 @@ import android.support.annotation.NonNull;
 
 import com.acmerobotics.roadrunner.control.PIDCoefficients;
 import com.qualcomm.hardware.bosch.BNO055IMU;
+import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorControllerEx;
@@ -37,7 +38,7 @@ public class DriveTrain extends SampleMecanumDriveBase {
     private BNO055IMU imu;
     private DriveMode driveMode = DriveMode.STOP;
     //private Gamepad gamepad = null;
-    private OpMode opMode = null;
+    private LinearOpMode opMode = null;
     private double forward, strafe, rotate;
     private double frontLeftSpeed, frontRightSpeed, backLeftSpeed, backRightSpeed;
     private double speedAngle, joystickAngle, angleChange;
@@ -77,7 +78,7 @@ public class DriveTrain extends SampleMecanumDriveBase {
         rightRear.setDirection(DcMotor.Direction.REVERSE);
     }
 
-    public DriveTrain(HardwareMap hardwareMap, OpMode opmode) {
+    public DriveTrain(HardwareMap hardwareMap, LinearOpMode opmode) {
         super();
 
         LynxModuleUtil.ensureMinimumFirmwareVersion(hardwareMap);
@@ -213,8 +214,10 @@ public class DriveTrain extends SampleMecanumDriveBase {
                 }
 
                 setMotorPowers(frontLeftSpeed, backLeftSpeed, backRightSpeed, frontRightSpeed);
+                break;
             case TANK:
                 setMotorPowers(-opMode.gamepad1.left_stick_y, -opMode.gamepad1.left_stick_y, -opMode.gamepad1.right_stick_y, -opMode.gamepad1.right_stick_y);
+                break;
             case COOL_MECANUM:
                 joystickAngle = Math.atan2(-opMode.gamepad1.left_stick_y, opMode.gamepad1.left_stick_x);
 
@@ -265,7 +268,7 @@ public class DriveTrain extends SampleMecanumDriveBase {
                 } else {
                     setMotorPowers(rotate, rotate, -rotate, -rotate);
                 }
-
+                break;
             case TURTLE_SPEED:
                 rotate = opMode.gamepad1.right_stick_x;
                 forward = -opMode.gamepad1.left_stick_y;
@@ -289,8 +292,10 @@ public class DriveTrain extends SampleMecanumDriveBase {
                 }
 
                 setMotorPowers(frontLeftSpeed * 0.2, backLeftSpeed * 0.2, backRightSpeed * 0.2, frontRightSpeed * 0.2);
+                break;
             case STOP:
                 setMotorPowers(0, 0, 0, 0);
+                break;
         }
     }
 }

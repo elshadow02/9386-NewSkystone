@@ -1,6 +1,7 @@
 package org.firstinspires.ftc.teamcode.ComputerVision;
 
 import com.acmerobotics.dashboard.config.Config;
+import com.acmerobotics.roadrunner.geometry.Pose2d;
 import com.acmerobotics.roadrunner.trajectory.Trajectory;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
@@ -63,7 +64,7 @@ public class ConstantCVTest extends LinearOpMode {
                 .build();
 
         Trajectory traj = drive.trajectoryBuilder()
-                .back(DISTANCE)
+                .splineTo(new Pose2d(drive.getPoseEstimate().getX() + 20, drive.getPoseEstimate().getY() + 20, -0.25*Math.PI))
                 .build();
 
         StageSwitchingPipeline pipeline = new StageSwitchingPipeline();
@@ -91,31 +92,15 @@ public class ConstantCVTest extends LinearOpMode {
             sleep(100);
         }
 
-        while(opModeIsActive()) {
-            drive.followTrajectory(trajectory);
-            while (drive.isBusy() && opModeIsActive()) {
-                telemetry.addData("Values", valLeft + "   " + valMid + "   " + valRight);
-                telemetry.update();
+        drive.followTrajectory(trajectory);
 
-                if (isStopRequested()) return;
-
-                drive.update();
-            }
-
-            sleep(1000);
-
-            drive.followTrajectory(traj);
-            while (drive.isBusy() && opModeIsActive()){
-                telemetry.addData("Values", valLeft + "   " + valMid + "   " + valRight);
-                telemetry.update();
-
-                if (isStopRequested()) return;
-
-                drive.update();
-            }
-
-            sleep(1000);
+        while(opModeIsActive() && drive.isBusy() && valLeft != 255) {
+            drive.update();
         }
+
+        drive.followTrajectorySync(traj);
+
+        sleep(2000);
     }
 
     static class StageSwitchingPipeline extends OpenCvPipeline

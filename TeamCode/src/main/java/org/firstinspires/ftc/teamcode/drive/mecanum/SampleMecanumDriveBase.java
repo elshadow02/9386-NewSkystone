@@ -38,7 +38,7 @@ import java.util.List;
 @Config
 public abstract class SampleMecanumDriveBase extends MecanumDrive {
     public static PIDCoefficients TRANSLATIONAL_PID = new PIDCoefficients(0, 0, 0);
-    public static PIDCoefficients HEADING_PID = new PIDCoefficients(0, 0, 0);
+    public static PIDCoefficients HEADING_PID = new PIDCoefficients(6, 0, 0.01);
 
 
     public enum Mode {
@@ -137,10 +137,12 @@ public abstract class SampleMecanumDriveBase extends MecanumDrive {
         packet.put("x", currentPose.getX());
         packet.put("y", currentPose.getY());
         packet.put("heading", currentPose.getHeading());
+        packet.put("heading(degree)", Math.toDegrees(currentPose.getHeading()));
 
         packet.put("xError", lastError.getX());
         packet.put("yError", lastError.getY());
         packet.put("headingError", lastError.getHeading());
+        packet.put("headingError(degree)", Math.toDegrees(lastError.getHeading()));
 
         switch (mode) {
             case IDLE:

@@ -17,7 +17,7 @@ import com.qualcomm.robotcore.hardware.DcMotor
  * the PID variables until the current position reaches the target without oscillation.
  */
 
-@TeleOp(name = "PIDTuner")
+@TeleOp(name = "ArmPIDKotlin")
 @Config
 class ArmPIDTunerKotlin : OpMode() {
 

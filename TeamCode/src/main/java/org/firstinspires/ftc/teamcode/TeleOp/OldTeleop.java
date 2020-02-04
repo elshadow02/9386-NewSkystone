@@ -139,7 +139,7 @@ public class OldTeleop extends LinearOpMode {
             }
 
             if (gamepad2.x) {
-                robot.claw.setPosition(0.4);
+                robot.claw.setPosition(0.5);
             }
 
             //arm.update();

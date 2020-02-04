@@ -118,10 +118,12 @@ public class BlueQuarryAuto extends LinearOpMode {
         telemetry.clear();
 
         runtime.reset();
-        while (!opModeIsActive()) {
+        while (!opModeIsActive() && !isStopRequested()) {
             telemetry.addData("Values", valLeft+"   "+valMid+"   "+valRight);
             telemetry.addData("Height", rows);
             telemetry.addData("Width", cols);
+
+            System.out.println("Camera color: " + valLeft+"   "+valMid+"   "+valRight);
 
             telemetry.update();
             sleep(100);
@@ -130,7 +132,6 @@ public class BlueQuarryAuto extends LinearOpMode {
 //            moveDistance(0.4, 700);
 
         }
-        waitForStart();
 
         if (valLeft == 0 && valMid > 0 && valRight > 0){
             SkystonePos = 1;

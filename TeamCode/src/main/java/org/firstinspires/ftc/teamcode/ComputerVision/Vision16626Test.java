@@ -1,5 +1,6 @@
 package org.firstinspires.ftc.teamcode.ComputerVision;
 
+import com.acmerobotics.dashboard.FtcDashboard;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import org.openftc.easyopencv.OpenCvCamera;
@@ -19,7 +20,11 @@ public class Vision16626Test extends LinearOpMode {
 
     @Override
     public void runOpMode() throws InterruptedException {
+        telemetry.addData("pos", 0);
+        telemetry.update();
         pipeline = new VisionPipelineFrom16626();
+        telemetry.addData("pos", 1);
+        telemetry.update();
         int cameraMonitorViewId = hardwareMap.appContext.getResources()
                 .getIdentifier(
                         "cameraMonitorViewId",
@@ -27,11 +32,20 @@ public class Vision16626Test extends LinearOpMode {
                         hardwareMap.appContext.getPackageName()
                 );
 
+        telemetry.addData("pos", 2);
+        telemetry.update();
+
         camera = OpenCvCameraFactory
                 .getInstance()
                 .createWebcam(hardwareMap.get(WebcamName.class, "Webcam 1"), cameraMonitorViewId);
+        telemetry.addData("pos", 3);
+        telemetry.update();
         camera.openCameraDevice();
+        telemetry.addData("pos", 4);
+        telemetry.update();
         camera.setPipeline(pipeline);
+        telemetry.addData("pos", 5);
+        telemetry.update();
         camera.startStreaming(pipeline.getWidth(), pipeline.getHeight(), OpenCvCameraRotation.UPRIGHT);
 
         while (!opModeIsActive() && !isStopRequested()){

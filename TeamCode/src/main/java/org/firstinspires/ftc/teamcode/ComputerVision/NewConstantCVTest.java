@@ -32,6 +32,7 @@ public class NewConstantCVTest extends LinearOpMode {
                 .build();
 
         pipeline = new VisionPipelineFrom16626();
+        //pipeline = new VisionPipelineFrom16626();
         int cameraMonitorViewId = hardwareMap.appContext.getResources()
                 .getIdentifier(
                         "cameraMonitorViewId",

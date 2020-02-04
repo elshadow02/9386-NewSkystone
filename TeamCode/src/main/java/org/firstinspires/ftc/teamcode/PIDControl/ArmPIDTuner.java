@@ -9,6 +9,7 @@ import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
+import com.qualcomm.robotcore.hardware.PIDFCoefficients;
 import com.qualcomm.robotcore.util.Range;
 
 /*
@@ -29,7 +30,7 @@ import com.qualcomm.robotcore.util.Range;
 
         public static double maxPower = 1;
 
-        public static double kp = 1;
+        public static double kp = 6;
         public static double ki = 0.0;
         public static double kd = 0.0;
 
@@ -39,7 +40,7 @@ import com.qualcomm.robotcore.util.Range;
 
         //If you are using a gear system between the arm motor and the output shaft,
         //Put the overall gear ratio here.
-        public static double gearRatio = 1;
+        public static double gearRatio = 2;
 
         //Motor encoder ticks per angle of rotation
         public double ticksPerAngle = 1;
@@ -66,14 +67,15 @@ import com.qualcomm.robotcore.util.Range;
 
         @Override
         public void loop() {
-            pid.setkP(kp);
-            pid.setkI(ki);
-            pid.setkD(kd);
+            arm.setPIDFCoefficients(DcMotor.RunMode.RUN_TO_POSITION, new PIDFCoefficients(kp, ki, kd, 0));
+
+            //pidf = new PIDFController(new PIDCoefficients(kp, ki, kd))
 
             telemetry.addData("Distance to travel: ", travel);
             telemetry.addData("Encoder Value: ", arm.getCurrentPosition());
-            telemetry.addData("Error: ", pidf.getLastError());
-            telemetry.addData("The Target: ", pidf.getTargetPosition());
+            telemetry.addData("Error: ", arm.getTargetPosition() - arm.getCurrentPosition());
+            telemetry.addData("The Target: ", arm.getTargetPosition());
+            telemetry.addData("Arm PID: ", arm.getPIDFCoefficients(DcMotor.RunMode.RUN_TO_POSITION));
             telemetry.update();
 
             if (start == 1){
@@ -82,14 +84,23 @@ import com.qualcomm.robotcore.util.Range;
         }
 
         public void setPosition(double angle){
-            pidf.setTargetPosition(angle*ticksPerAngle);
 
-            double outputf = pidf.update(arm.getCurrentPosition());
+            int newAngle = (int)(angle*ticksPerAngle);
+
+            arm.setTargetPosition(newAngle);
+
+            if (arm.getMode() != DcMotor.RunMode.RUN_TO_POSITION){
+                arm.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+            }
 
 
 
-            arm.setPower(Range.clip(outputf, -1.0, -1.0));
-
+            if ((arm.getTargetPosition() - arm.getCurrentPosition()) < 325){
+                arm.setPower(0.2);
+            }
+            else {
+                arm.setPower(maxPower);
+            }
 
 //            angle *= ticksPerAngle;
 //
@@ -107,7 +118,6 @@ import com.qualcomm.robotcore.util.Range;
 
             telemetry.addData("Encoder target: ", angle);
             telemetry.addData("Error: ", pidf.getLastError());
-            telemetry.addData("Output: ", outputf);
             telemetry.addData("kp: ", kp);
             telemetry.addData("ki: ", ki);
             telemetry.addData("kd: ", kd);
