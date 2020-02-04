@@ -38,7 +38,7 @@ public class DriveTrain extends SampleMecanumDriveBase {
     private BNO055IMU imu;
     private DriveMode driveMode = DriveMode.STOP;
     //private Gamepad gamepad = null;
-    private LinearOpMode opMode = null;
+    private OpMode opMode = null;
     private double forward, strafe, rotate;
     private double frontLeftSpeed, frontRightSpeed, backLeftSpeed, backRightSpeed;
     private double speedAngle, joystickAngle, angleChange;
@@ -78,7 +78,7 @@ public class DriveTrain extends SampleMecanumDriveBase {
         rightRear.setDirection(DcMotor.Direction.REVERSE);
     }
 
-    public DriveTrain(HardwareMap hardwareMap, LinearOpMode opmode) {
+    public DriveTrain(HardwareMap hardwareMap, OpMode opmode) {
         super();
 
         LynxModuleUtil.ensureMinimumFirmwareVersion(hardwareMap);

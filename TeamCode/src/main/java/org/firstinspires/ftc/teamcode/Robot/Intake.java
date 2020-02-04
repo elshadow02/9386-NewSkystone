@@ -80,6 +80,8 @@ public class Intake {
 
         switch(mode){
             case PREMATCH:
+                intakeLeftServo.setPosition(0.3);
+                intakeRightServo.setPosition(1.0);
                 setPower(0);
             case TELEOP:
                 if (gamepad.right_trigger > 0.1){
@@ -92,7 +94,9 @@ public class Intake {
                     setPower(0);
                 }
             case OUT:
-
+                intakeLeftServo.setPosition(0.3);
+                intakeRightServo.setPosition(1.0);
+                setPower(1.0);
             case STOP:
                 setPower(0);
         }

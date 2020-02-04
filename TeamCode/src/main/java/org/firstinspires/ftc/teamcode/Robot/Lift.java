@@ -98,29 +98,21 @@ public class Lift {
     public void initPosition() { setDistance(2);}
 
     public void setDistance(double distance){
-        distance *= ticksPerInch;
+        if(getMode() == MotorMode.RUN_TO_POSITION || getMode() == MotorMode.AUTO) {
+            int newAngle = (int) (distance * ticksPerInch);
 
-        double output;
+            lift.setTargetPosition(newAngle);
 
-        double error;
+            if (lift.getMode() != DcMotor.RunMode.RUN_TO_POSITION) {
+                lift.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+            }
 
 
-        error = distance - lift.getCurrentPosition();
-
-        //output = error * kp;
-        output = pid.calculate(error);
-
-        if(!down.isPressed() && !up.isPressed()) {
-            lift.setPower(output);
-        }
-        else if(down.isPressed() && output < 0){
-            lift.setPower(0);
-        }
-        else if(up.isPressed() && output > 0){
-            lift.setPower(0);
-        }
-        else{
-            lift.setPower(0);
+            if ((lift.getTargetPosition() - lift.getCurrentPosition()) < 325) {
+                lift.setPower(0.2);
+            } else {
+                lift.setPower(maxPower);
+            }
         }
     }
 
