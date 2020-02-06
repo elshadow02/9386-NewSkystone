@@ -48,7 +48,7 @@ public class RQPTest3 extends LinearOpMode {
         drive.followTrajectorySync(
                 drive.trajectoryBuilder()
                         .reverse().splineTo(new Pose2d(0, -40, Math.PI))
-                        .splineTo(new Pose2d(50, -23, 1.5*Math.PI))
+                        .splineTo(new Pose2d(45, -23, 1.5*Math.PI))
                         .addMarker(new Vector2d(35, -33), () -> {
 //                            fL.setPosition(0);
 //                            fR.setPosition(0);

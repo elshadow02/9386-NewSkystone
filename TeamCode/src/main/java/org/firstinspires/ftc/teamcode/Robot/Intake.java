@@ -103,6 +103,12 @@ public class Intake {
                 intakeRightServo.setPosition(1.0);
                 setPower(1.0);
                 break;
+            case PULL:
+                setPower(1.0);
+                break;
+            case PUSH:
+                setPower(-1.0);
+                break;
             case STOP:
                 setPower(0);
                 break;
