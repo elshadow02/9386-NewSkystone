@@ -102,6 +102,10 @@ import com.qualcomm.robotcore.util.Range;
                 arm.setPower(maxPower);
             }
 
+            telemetry.addData("Arm Power", arm.getPower());
+            telemetry.addData("Arm Power", arm.getVelocity());
+            telemetry.update();
+
 //            angle *= ticksPerAngle;
 //
 //            double output;
@@ -116,13 +120,13 @@ import com.qualcomm.robotcore.util.Range;
 //
 //            arm.setPower(output);
 
-            telemetry.addData("Encoder target: ", angle);
-            telemetry.addData("Error: ", pidf.getLastError());
-            telemetry.addData("kp: ", kp);
-            telemetry.addData("ki: ", ki);
-            telemetry.addData("kd: ", kd);
-            telemetry.addData("Target: ", pidf.getTargetPosition());
-            telemetry.update();
+//            telemetry.addData("Encoder target: ", angle);
+//            telemetry.addData("Error: ", pidf.getLastError());
+//            telemetry.addData("kp: ", kp);
+//            telemetry.addData("ki: ", ki);
+//            telemetry.addData("kd: ", kd);
+//            telemetry.addData("Target: ", pidf.getTargetPosition());
+//            telemetry.update();
             loopCount += 1;
         }
 

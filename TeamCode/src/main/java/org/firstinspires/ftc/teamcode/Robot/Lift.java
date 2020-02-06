@@ -117,25 +117,27 @@ public class Lift {
     }
 
     public void update(){
-        if(gamepad.right_bumper && liftPosition != 8){
-            liftPosition += 1;
-        }
+        if(getMode() != MotorMode.AUTO) {
+            if (gamepad.right_bumper && liftPosition != 8) {
+                liftPosition += 1;
+            }
 
-        if(gamepad.left_bumper && liftPosition != 1){
-            liftPosition -= 1;
-        }
+            if (gamepad.left_bumper && liftPosition != 1) {
+                liftPosition -= 1;
+            }
 
-        if(gamepad.dpad_up){
-            setMode(MotorMode.RUN_TO_POSITION);
-        }
+            if (gamepad.dpad_up) {
+                setMode(MotorMode.RUN_TO_POSITION);
+            }
 
-        if(gamepad.dpad_down){
-            liftPosition = 1;
-            setMode(MotorMode.RUN_TO_POSITION);
-        }
+            if (gamepad.dpad_down) {
+                liftPosition = 1;
+                setMode(MotorMode.RUN_TO_POSITION);
+            }
 
-        if(Math.abs(gamepad.left_stick_y ) > 0.1 && mode != MotorMode.CONTROLLED){
-            mode = MotorMode.CONTROLLED;
+            if (Math.abs(gamepad.left_stick_y) > 0.1 && mode != MotorMode.CONTROLLED) {
+                mode = MotorMode.CONTROLLED;
+            }
         }
 
         switch(mode){

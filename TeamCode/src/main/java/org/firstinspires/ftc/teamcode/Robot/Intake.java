@@ -14,15 +14,9 @@ public class Intake {
     private DcMotor intakeRight = null;
     private Servo intakeLeftServo = null;
     private Servo intakeRightServo = null;
+    private Servo foundL = null;
+    private Servo foundR = null;
     private OpMode opMode = null;
-    private double intakeLeftStartPos = 0;
-
-    private PIDController pid = new PIDController(0, 0, 0);
-
-    private static double gearRatio = 1;
-
-    //Motor encoder ticks per angle of rotation
-    private double ticksPerAngle = 1;
 
     private double maxPower = 1;
 
@@ -38,8 +32,8 @@ public class Intake {
 
         intakeLeftServo = hwMap.get(Servo.class, "iLS");
         intakeRightServo = hwMap.get(Servo.class, "iRS");
-
-        ticksPerAngle = (intakeLeft.getMotorType().getTicksPerRev()*gearRatio)/360;
+        foundL = hwMap.get(Servo.class, "foundL");
+        foundR = hwMap.get(Servo.class, "foundR");
 
         this.opMode = opmode;
 
@@ -83,6 +77,7 @@ public class Intake {
                 intakeLeftServo.setPosition(0.3);
                 intakeRightServo.setPosition(1.0);
                 setPower(0);
+                break;
             case TELEOP:
                 if (gamepad.right_trigger > 0.1){
                     setPower(gamepad.right_trigger);
@@ -93,12 +88,24 @@ public class Intake {
                 else{
                     setPower(0);
                 }
+
+                if(gamepad.dpad_right){
+                    intakeLeftServo.setPosition(0.3);
+                    intakeRightServo.setPosition(1.0);
+                }
+                if(gamepad.dpad_left){
+                    intakeLeftServo.setPosition(0.3);
+                    intakeRightServo.setPosition(1.0);
+                }
+                break;
             case OUT:
                 intakeLeftServo.setPosition(0.3);
                 intakeRightServo.setPosition(1.0);
                 setPower(1.0);
+                break;
             case STOP:
                 setPower(0);
+                break;
         }
     }
 

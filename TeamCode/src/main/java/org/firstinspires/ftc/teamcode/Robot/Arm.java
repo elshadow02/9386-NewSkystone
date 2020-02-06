@@ -97,23 +97,25 @@ public class Arm {
     }
 
     public void update(){
-        if(gamepad.dpad_right){
-            setMode(MotorMode.RUN_TO_POSITION);
-            armIntakePosition = true;
-        }
+        if(getMode() != MotorMode.AUTO) {
+            if (gamepad.dpad_right) {
+                setMode(MotorMode.RUN_TO_POSITION);
+                armIntakePosition = true;
+            }
 
-        if(gamepad.dpad_left){
-            setMode(MotorMode.RUN_TO_POSITION);
-            armIntakePosition = false;
-        }
+            if (gamepad.dpad_left) {
+                setMode(MotorMode.RUN_TO_POSITION);
+                armIntakePosition = false;
+            }
 
-        if(Math.abs(gamepad.right_stick_y) > 0.1 && mode != MotorMode.CONTROLLED){
-            mode = MotorMode.CONTROLLED;
+            if (Math.abs(gamepad.right_stick_y) > 0.1 && mode != MotorMode.CONTROLLED) {
+                mode = MotorMode.CONTROLLED;
+            }
         }
 
         switch(mode){
             case AUTO:
-
+                //Let the user call the positions themselves
             case RUN_TO_POSITION:
                 if(armIntakePosition == true){
                     intake();

@@ -14,12 +14,30 @@ public class Claw {
         pad = opmode.gamepad2;
     }
 
+    public void setMode(ClawMode newMode){
+        this.mode = newMode;
+    }
+
+    public ClawMode getMode(){
+        return this.mode;
+    }
+
+    public void grab(){
+        claw.setPosition(0.04);
+    }
+
+    public void intake(){
+        claw.setPosition(0.5);
+    }
+
     public void update(){
-        if (pad.x){
-            mode = ClawMode.GRAB;
-        }
-        if (pad.b){
-            mode = ClawMode.INTAKE;
+        if(getMode() != ClawMode.AUTO) {
+            if (pad.x) {
+                mode = ClawMode.GRAB;
+            }
+            if (pad.b) {
+                mode = ClawMode.INTAKE;
+            }
         }
 
         switch(mode){

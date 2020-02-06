@@ -291,7 +291,7 @@ public class DriveTrain extends SampleMecanumDriveBase {
                     backRightSpeed /= max;
                 }
 
-                setMotorPowers(frontLeftSpeed * 0.2, backLeftSpeed * 0.2, backRightSpeed * 0.2, frontRightSpeed * 0.2);
+                setMotorPowers(frontLeftSpeed * 0.3, backLeftSpeed * 0.3, backRightSpeed * 0.3, frontRightSpeed * 0.3);
                 break;
             case STOP:
                 setMotorPowers(0, 0, 0, 0);
