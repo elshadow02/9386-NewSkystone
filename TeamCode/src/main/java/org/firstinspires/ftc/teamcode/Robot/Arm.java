@@ -22,7 +22,7 @@ public class Arm {
     //Motor encoder ticks per angle of rotation
     private double ticksPerAngle = 1;
 
-    private double maxPower = 0.5;
+    private double maxPower = 0.9;
 
     private MotorMode mode = MotorMode.STOP;
 
@@ -77,6 +77,10 @@ public class Arm {
         setAngle(180);
     }
 
+    public boolean isBusy(){
+        return arm.isBusy();
+    }
+
     public void setAngle(double angle){
         if(getMode() == MotorMode.RUN_TO_POSITION || getMode() == MotorMode.AUTO) {
             int newAngle = (int) (angle * ticksPerAngle);
@@ -88,8 +92,8 @@ public class Arm {
             }
 
 
-            if ((arm.getTargetPosition() - arm.getCurrentPosition()) < 325) {
-                arm.setPower(0.2);
+            if ((arm.getTargetPosition() - arm.getCurrentPosition()) < 100) {
+                arm.setPower(0.3);
             } else {
                 arm.setPower(maxPower);
             }

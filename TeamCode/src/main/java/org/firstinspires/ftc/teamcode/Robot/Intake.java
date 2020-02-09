@@ -103,13 +103,13 @@ public class Intake {
             case OUT:
                 intakeLeftServo.setPosition(0.3);
                 intakeRightServo.setPosition(1.0);
-                setPower(1.0);
+                setPower(1.0 * maxPower);
                 break;
             case PULL:
-                setPower(1.0);
+                setPower(1.0 * maxPower);
                 break;
             case PUSH:
-                setPower(-1.0);
+                setPower(-1.0 * maxPower);
                 break;
             case STOP:
                 setPower(0);

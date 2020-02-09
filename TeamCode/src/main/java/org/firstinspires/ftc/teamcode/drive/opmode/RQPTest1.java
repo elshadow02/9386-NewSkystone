@@ -9,6 +9,11 @@ import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.Servo;
 
 import org.firstinspires.ftc.teamcode.Robot.Arm;
+import org.firstinspires.ftc.teamcode.Robot.Claw;
+import org.firstinspires.ftc.teamcode.Robot.ClawMode;
+import org.firstinspires.ftc.teamcode.Robot.FoundationGrabber;
+import org.firstinspires.ftc.teamcode.Robot.Intake;
+import org.firstinspires.ftc.teamcode.Robot.IntakeMode;
 import org.firstinspires.ftc.teamcode.Robot.MotorMode;
 import org.firstinspires.ftc.teamcode.drive.mecanum.SampleMecanumDriveBase;
 import org.firstinspires.ftc.teamcode.drive.mecanum.SampleMecanumDriveREVOptimized;
@@ -20,120 +25,143 @@ import kotlin.Unit;
  */
 @Autonomous(group = "drive")
 public class RQPTest1 extends LinearOpMode {
-    public DcMotor iL = null;
-    public DcMotor iR = null;
-    public Servo iLS = null;
-    public Servo iRS = null;
-    public Servo fL = null;
-    public Servo fR = null;
-    public Servo claw = null;
 
     @Override
     public void runOpMode() throws InterruptedException {
         Arm arm = new Arm(hardwareMap, this);
+        arm.setMode(MotorMode.AUTO);
+        arm.setPower(0);
         SampleMecanumDriveBase drive = new SampleMecanumDriveREVOptimized(hardwareMap);
-        iL = hardwareMap.get(DcMotor.class, "iL");
-        iR = hardwareMap.get(DcMotor.class, "iR");
-        iL.setDirection(DcMotorSimple.Direction.REVERSE);
-
-        iLS = hardwareMap.get(Servo.class, "iLS");
-        iRS = hardwareMap.get(Servo.class, "iRS");
-        fL = hardwareMap.get(Servo.class, "foundL");
-        fR = hardwareMap.get(Servo.class, "foundR");
-        claw = hardwareMap.get(Servo.class, "claw");
-
+        Intake intake = new Intake(hardwareMap, this);
+        intake.setMaxPower(1.0);
+        Claw claw = new Claw(this);
+        claw.setMode(ClawMode.AUTO);
+        FoundationGrabber grabber = new FoundationGrabber(hardwareMap, this);
         drive.setPoseEstimate(new Pose2d(-13, -62.5, 0.5*Math.PI));
 
         waitForStart();
 
         if (isStopRequested()) return;
 
+        claw.intake();
+
         drive.followTrajectorySync(
                 drive.trajectoryBuilder()
-                        .splineTo(new Pose2d(-25, -23, 0.5*Math.PI))
+                        .splineTo(new Pose2d(-25, -22, 0.5*Math.PI))
                         .addMarker(new Vector2d(-18, -43), () -> {
-                            iL.setPower(0.8);
-                            iR.setPower(0.8);
+                            intake.setMode(IntakeMode.OUT);
+                            intake.update();
                             return Unit.INSTANCE;
                         })
                         .build()
         );
-
-//        iL.setPower(0);
-//        iR.setPower(0);
-        //claw.setPosition(0.04);
 
         drive.followTrajectorySync(
                 drive.trajectoryBuilder()
-                .reverse().splineTo(new Pose2d(0, -40, Math.PI))
-                        .splineTo(new Pose2d(45, -23, 1.5*Math.PI))
-                        .addMarker(new Vector2d(35, -33), () -> {
-                            fL.setPosition(0);
-                            fR.setPosition(0);
+                .reverse().splineTo(new Pose2d(0, -46, Math.PI))
+                        .splineTo(new Pose2d(52, -22, 1.5*Math.PI))
+                        .addMarker(new Vector2d(45, -24), () -> {
+                            grabber.setMode(IntakeMode.OUT);
+                            grabber.update();
                             return Unit.INSTANCE;
                         })
+                        .lineTo(new Vector2d(52, -17))
                         .build()
         );
 
-        iL.setPower(0);
-        iR.setPower(0);
-//        claw.setPosition(0.04);
-//
-//        arm.setPower(0.4);
+        sleep(750);
 
-        drive.followTrajectory(drive.trajectoryBuilder()
-                .splineTo(new Pose2d(35, -45, Math.PI))
-                .back(12)
+        intake.setMode(IntakeMode.STOP);
+        intake.update();
+        claw.grab();
+
+
+//        drive.followTrajectory(drive.trajectoryBuilder()
+//                .splineTo(new Pose2d(27, -45, Math.PI))
+//                .back(12)
+//                .build()
+//        );
+
+        drive.followTrajectorySync(drive.trajectoryBuilder()
+                .strafeRight(16)
                 .build()
         );
 
-        //arm.setMode(MotorMode.AUTO);
+        drive.followTrajectory(drive.trajectoryBuilder()
+                .splineTo(new Pose2d(27, -45, Math.PI))
+                .back(22)
+                .build()
+        );
+
+        arm.stack();
+
         while(drive.isBusy()){
-            //arm.stack();
+            arm.stack();
             drive.update();
         }
 
-//        claw.setPosition(0.5);
-//        arm.setPower(-0.3);
 
-        //claw.setPosition(0.5);
+
+        claw.intake();
+
+        sleep(750);
+
+        claw.grab();
+        arm.intake();
 
         //arm.intake();
 
-        fL.setPosition(1.0);
-        fR.setPosition(1.0);
+        grabber.setMode(IntakeMode.PREMATCH);
+        grabber.update();
 
-        iL.setPower(0.8);
-        iR.setPower(0.8);
+        intake.setMode(IntakeMode.PULL);
+        intake.update();
+
+        claw.intake();
 
         drive.followTrajectorySync(drive.trajectoryBuilder()
-                .splineTo(new Pose2d(-49.5, -15, 0.5*Math.PI))
-                .reverse().splineTo(new Pose2d(45, -53, Math.PI))
+                .splineTo(new Pose2d(-41, -15, 0.5*Math.PI))
                 .build()
         );
 
         drive.followTrajectorySync(drive.trajectoryBuilder()
-                .splineTo(new Pose2d(-28, -15, 0.5*Math.PI))
-                .reverse().splineTo(new Pose2d(45, -65, Math.PI))
+                .reverse().splineTo(new Pose2d(45, -35, Math.PI))
+                .addMarker(new Vector2d(0, -32), () -> {
+                    claw.grab();
+                    intake.setMode(IntakeMode.STOP);
+                    intake.update();
+                    arm.stack();
+                    return Unit.INSTANCE;
+                })
                 .build()
         );
 
+        claw.intake();
+        arm.intake();
+        intake.setMode(IntakeMode.PULL);
+        intake.update();
 
-        //sleep(2000);
+        drive.followTrajectorySync(drive.trajectoryBuilder()
+                .splineTo(new Pose2d(-28, -13, 0.5*Math.PI))
+                .build()
+        );
 
-//        drive.followTrajectorySync(
-//                drive.trajectoryBuilder()
-//                        .splineTo(new Pose2d(30, 30, 0))
-//                        .build()
-//        );
-//
-//        sleep(2000);
-//
-//        drive.followTrajectorySync(
-//                drive.trajectoryBuilder()
-//                .reverse()
-//                .splineTo(new Pose2d(0, 0, 0))
-//                .build()
-//        );
+        drive.followTrajectorySync(drive.trajectoryBuilder()
+                .reverse().splineTo(new Pose2d(45, -35, Math.PI))
+                .addMarker(new Vector2d(0, -32), () -> {
+                    claw.grab();
+                    intake.setMode(IntakeMode.STOP);
+                    intake.update();
+                    arm.stack();
+                    return Unit.INSTANCE;
+                })
+                .build()
+        );
+
+        claw.intake();
+
+        drive.followTrajectorySync(drive.trajectoryBuilder()
+                .forward(20)
+                .build());
     }
 }

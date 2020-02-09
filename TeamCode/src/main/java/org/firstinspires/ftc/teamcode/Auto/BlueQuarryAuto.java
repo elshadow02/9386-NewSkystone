@@ -25,6 +25,8 @@ import org.firstinspires.ftc.robotcore.external.navigation.VuforiaTrackableDefau
 import org.firstinspires.ftc.robotcore.external.navigation.VuforiaTrackables;
 import org.firstinspires.ftc.robotcore.internal.system.AppUtil;
 
+import org.firstinspires.ftc.teamcode.Robot.MintyPoncho;
+import org.firstinspires.ftc.teamcode.Robot.RobotMode;
 import org.firstinspires.ftc.teamcode.TeleOp.EEHardware;
 //import org.firstinspires.ftc.teamcode.VuforiaTesting.VuforiaImpPlus;
 import org.opencv.core.Core;
@@ -47,10 +49,10 @@ import java.util.Locale;
 
 import org.firstinspires.ftc.teamcode.PIDControl.PIDController;
 
-@Autonomous(name="BlueQuarryAuto", group ="Concept")
+@Autonomous(name="StateRedQuarryAutoTest", group ="Concept")
 public class BlueQuarryAuto extends LinearOpMode {
 
-    EEHardware bot = new EEHardware();
+    //EEHardware bot = new EEHardware();
 
     private DcMotor wheel1;
     private DcMotor wheel2;
@@ -95,12 +97,9 @@ public class BlueQuarryAuto extends LinearOpMode {
 
     @Override
     public void runOpMode() throws InterruptedException {
-        bot.init(hardwareMap);
+        MintyPoncho robot = new MintyPoncho(this);
 
-        wheel1 = bot.frontRight;
-        wheel2 = bot.frontLeft;
-        wheel3 = bot.backLeft;
-        wheel4 = bot.backRight;
+        robot.setMode(RobotMode.STOP);
 
         StageSwitchingPipeline pipeline = new StageSwitchingPipeline();
 
@@ -134,455 +133,20 @@ public class BlueQuarryAuto extends LinearOpMode {
         }
 
         if (valLeft == 0 && valMid > 0 && valRight > 0){
-            SkystonePos = 1;
+            robot.setMode(RobotMode.STOP);
         }
         else if (valLeft > 0 && valMid == 0 && valRight > 0){
-            SkystonePos = 2;
+            robot.setMode(RobotMode.RED_QUARRYAUTO2);
         }
         else if (valLeft > 0 && valMid > 0 && valRight == 0){
-            SkystonePos = 3;
+            robot.setMode(RobotMode.RED_QUARRY_AUTO1);
         }
         else{
             telemetry.addData("Something went ", "Super Duper wrong.");
             telemetry.update();
         }
 
-        telemetry.addData("Skystone Pos ", SkystonePos);
-        telemetry.update();
-
-        //sleep(2000);
-        double travel = 0;
-
-        if (SkystonePos == 1){
-            travel = 17;
-        }
-        else if (SkystonePos == 2){
-            travel = 29;
-        }
-        else{
-            travel = 37;
-        }
-
-        strafe(0.7, travel, 5.0, true);
-
-        gyroDrive(0, 0.7, 2, 6.0);
-
-        bot.intakeLeftServo.setPosition(0.3);
-        bot.intakeRightServo.setPosition(1.0);
-
-        while (!bot.down.isPressed()){
-            bot.lift.setPower(-1);
-            sleep(825);
-            bot.lift.setPower(0);
-            break;
-        }
-
-        bot.intakeLeft.setPower(1);
-        bot.intakeRight.setPower(1);
-
-        gyroDrive(0, 0.4, 36.5, 6.0);
-
-        sleep(350);
-
-        bot.intakeLeft.setPower(0);
-        bot.intakeRight.setPower(0);
-
-        gyroDrive(0, -1.0, 6, 2.0);
-
-        gyroTurn(90, 1.0, 18, 3.0);
-
-        if (SkystonePos == 1){
-            gyroDrive(90, 1.0, 46, 5.0);
-        }
-        else if (SkystonePos == 2){
-            gyroDrive(90, 1.0, 54, 5.0);
-        }
-        else{
-            gyroDrive(90, 1.0, 62, 5.0);
-        }
-
-        bot.intakeLeft.setPower(-1);
-        bot.intakeRight.setPower(-1);
-
-        sleep(1500);
-
-        bot.intakeLeft.setPower(0);
-        bot.intakeRight.setPower(0);
-
-        if (SkystonePos == 1){
-            gyroDrive(90, -1.0, 51, 5.0);
-        }
-        else if (SkystonePos == 2){
-            gyroDrive(90, -1.0, 59, 5.0);
-        }
-        else{
-            gyroDrive(90, -1.0, 57, 5.0);
-        }
-
-        strafe(1.0, 8, 2.0,false);
-
-        if(SkystonePos == 3){
-            gyroTurn(-20, 1.0, 27, 3.0);
-        }
-        else {
-            gyroTurn(0, 1.0, 21, 3.0);
-        }
-
-        bot.intakeLeft.setPower(1);
-        bot.intakeRight.setPower(1);
-
-        if(SkystonePos == 3){
-            gyroDrive (-20, 0.5, 23.50, 5.0);
-        }
-        else {
-            gyroDrive (0, 0.5, 22.0, 5.0);
-        }
-
-        sleep(350);
-
-        bot.intakeLeft.setPower(0);
-        bot.intakeRight.setPower(0);
-
-        if(SkystonePos == 3){
-            gyroDrive (-20, -0.5, 7, 5.0);
-        }
-        else {
-            gyroDrive (0, -0.5, 5, 5.0);
-        }
-
-        strafe(1.0, 11, 2.0, false);
-
-        if(SkystonePos == 3){
-            gyroTurn(90, 1.0, 22, 3.0);
-        }
-        else {
-            gyroTurn(90, 1.0, 18, 3.0);
-        }
-
-        if (SkystonePos == 1){
-            gyroDrive(90, 1.0, 66, 5.0);
-        }
-        else if (SkystonePos == 2){
-            gyroDrive(90, 1.0, 73, 5.0);
-        }
-        else{
-            gyroDrive(90, 1.0, 76, 5.0);
-        }
-
-        bot.intakeLeft.setPower(-1);
-        bot.intakeRight.setPower(-1);
-
-        sleep(1500);
-
-        bot.intakeLeft.setPower(0);
-        bot.intakeRight.setPower(0);
-
-        gyroDrive(90,-1.0, 12, 2.0);
-    }
-
-    private void strafe(double desiredPower, double distance, double timeout, boolean right) {
-        //PIDController controller = new PIDController(DRIVE_kP, 0, 0);
-        //PIDController driveControl = new PIDController(DRIVE_kP, DRIVE_kI, DRIVE_kD);
-
-        distance = distance * TICKS_PER_INCH;
-
-        wheel1.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-        wheel2.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-        wheel3.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-        wheel4.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-
-        double rightStart = bot.frontRight.getCurrentPosition(); // top right
-        double leftStart = bot.frontLeft.getCurrentPosition(); // top left
-
-        double startTime = time;
-
-        double angleEerror, driveError;
-        double rightError, leftError;
-
-        while (opModeIsActive() && ((time -startTime)< timeout) && Math.abs(bot.frontRight.getCurrentPosition() - rightStart) <= distance && Math.abs(bot.frontLeft.getCurrentPosition() - leftStart) <= distance) {
-
-//            driveControl.setkP(DRIVE_kP);
-//            driveControl.setkI(DRIVE_kI);
-//            driveControl.setkD(DRIVE_kD);
-
-            rightError = distance - (wheel1.getCurrentPosition() - rightStart);
-            leftError = distance - (wheel2.getCurrentPosition() - leftStart);
-
-            driveError = (rightError + leftError) / 2;
-
-            // telemetry.addData("error", angleEerror);
-            //telemetry.addData("correction", correction);
-            telemetry.addData("rightEncoder: ", bot.frontRight.getCurrentPosition());
-            telemetry.addData("leftEncoder: ", bot.frontLeft.getCurrentPosition());
-            telemetry.addData("distance: ", distance);
-            telemetry.addData("Right Error: ", rightError);
-            telemetry.addData("Left Error: ", leftError);
-            //telemetry.addData("Current angle:", orientation.thirdAngle);
-            telemetry.update();
-
-            if (right == false){
-                wheel1.setPower(desiredPower);
-                wheel4.setPower(-desiredPower);
-                wheel2.setPower(-desiredPower);
-                wheel3.setPower(desiredPower);
-            }
-            else {
-                wheel1.setPower(-desiredPower);
-                wheel4.setPower(desiredPower);
-                wheel2.setPower(desiredPower);
-                wheel3.setPower(-desiredPower);
-            }
-        }
-        wheel1.setPower(0);
-        wheel4.setPower(0);
-        wheel2.setPower(0);
-        wheel3.setPower(0);
-
-        telemetry.addData("Finished with the loop: ", "right?");
-        //telemetry.addData("Current angle:", orientation.thirdAngle);
-        telemetry.update();
-    }
-
-    private void drive(double desiredPower, double distance, double timeout) {
-        //PIDController controller = new PIDController(DRIVE_kP, 0, 0);
-        PIDController driveControl = new PIDController(DRIVE_kP, DRIVE_kI, DRIVE_kD);
-        distance = distance * TICKS_PER_INCH;
-
-        wheel1.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-        wheel2.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-        wheel3.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-        wheel4.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-
-        double rightStart = bot.frontRight.getCurrentPosition(); // top right
-        double leftStart = bot.frontLeft.getCurrentPosition(); // top left
-
-        double startTime = time;
-
-        double angleEerror, driveError;
-        double rightError, leftError;
-
-        do {
-
-            driveControl.setkP(DRIVE_kP);
-            driveControl.setkI(DRIVE_kI);
-            driveControl.setkD(DRIVE_kD);
-
-//            Orientation orientation = bot.imu.getAngularOrientation(AxesReference.EXTRINSIC, AxesOrder.XYZ, AngleUnit.DEGREES);
-////            double angle = orientation.thirdAngle;
-////            angleError = targetAngle - angle;
-////            if (targetAngle - angle > 180) {
-////                angleError = targetAngle - (angle + 360);
-////            } else if (targetAngle - angle < -180) {
-////                angleError = targetAngle - (angle - 360);
-////            } else {
-////                angleError = targetAngle - angle;
-////            }
-
-            rightError = distance - (wheel1.getCurrentPosition() - rightStart);
-            leftError = distance - (wheel2.getCurrentPosition() - leftStart);
-
-            driveError = (rightError + leftError) / 2;
-
-            //double correction = controller.calculate(angleEerror); //controller.calculate(error);
-
-            double errorPower = driveControl.calculate(driveError);
-
-            double rightPower = errorPower;
-            double leftPower = errorPower;
-
-            double max = Math.max(Math.abs(rightPower), Math.abs(leftPower));
-            if (max > 1) { // clip the power between -1,1 while retaining relative speed percentage
-                rightPower = rightPower / max;
-                leftPower = leftPower / max;
-            }
-
-            // telemetry.addData("error", angleEerror);
-            //telemetry.addData("correction", correction);
-            telemetry.addData("rightPower: ", rightPower);
-            telemetry.addData("leftPower: ", leftPower);
-            telemetry.addData("driveError: ", driveError);
-            telemetry.addData("Error power: ", errorPower);
-            telemetry.addData("rightEncoder: ", bot.frontRight.getCurrentPosition());
-            telemetry.addData("leftEncoder: ", bot.frontLeft.getCurrentPosition());
-            telemetry.addData("distance: ", distance);
-            telemetry.addData("Right Error: ", rightError);
-            telemetry.addData("Left Error: ", leftError);
-            //telemetry.addData("Current angle:", orientation.thirdAngle);
-            telemetry.update();
-            wheel1.setPower(rightPower * desiredPower);
-            wheel4.setPower(rightPower * desiredPower);
-            wheel2.setPower(leftPower * desiredPower);
-            wheel3.setPower(leftPower * desiredPower);
-        }
-        while (opModeIsActive() && ((time -startTime)< timeout) && Math.abs(bot.frontRight.getPower()) > 0.15 && Math.abs(bot.frontLeft.getPower()) > 0.15);
-        wheel1.setPower(0);
-        wheel4.setPower(0);
-        wheel2.setPower(0);
-        wheel3.setPower(0);
-
-        telemetry.addData("Finished with the loop: ", "right?");
-        //telemetry.addData("Current angle:", orientation.thirdAngle);
-        telemetry.update();
-    }
-
-    private void gyroDrive(double targetAngle, double desiredPower, double distance, double timeout) {
-        PIDController controller = new PIDController(TURN_kP, 0, 0);
-//        PIDController driveControl = new PIDController(DRIVE_kP, DRIVE_kI, DRIVE_kD);
-
-        distance = distance * TICKS_PER_INCH;
-
-        wheel1.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-        wheel2.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-        wheel3.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-        wheel4.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-
-        double rightStart = bot.frontRight.getCurrentPosition(); // top right
-        double leftStart = bot.frontLeft.getCurrentPosition(); // top left
-
-        double startTime = time;
-
-        double angleError, driveError;
-        double rightError, leftError;
-
-        while (opModeIsActive() && Math.abs(wheel1.getCurrentPosition() - rightStart) < distance && Math.abs(wheel2.getCurrentPosition() - leftStart) < distance) {
-            if (time > startTime + timeout) { // timeout
-                telemetry.addLine("Drive loop timeout.");
-                break;
-            }
-
-            Orientation orientation = bot.imu.getAngularOrientation(AxesReference.EXTRINSIC, AxesOrder.XYZ, AngleUnit.DEGREES);
-            double angle = orientation.thirdAngle;
-            angleError = targetAngle - angle;
-            if (targetAngle - angle > 180) {
-                angleError = targetAngle - (angle + 360);
-            } else if (targetAngle - angle < -180) {
-                angleError = targetAngle - (angle - 360);
-            } else {
-                angleError = targetAngle - angle;
-            }
-
-            rightError = wheel1.getCurrentPosition() - rightStart;
-            leftError = wheel2.getCurrentPosition() - leftStart;
-
-            driveError = (rightError + leftError)/2;
-
-            double correction = controller.calculate(angleError); //controller.calculate(error);
-
-            //double errorPower = (driveControl.calculate(driveError)) * desiredPower;
-
-            double rightPower = desiredPower + correction;
-            double leftPower  = desiredPower - correction;
-
-            double max = Math.max(Math.abs(rightPower), Math.abs(leftPower));
-            if (max > 1) { // clip the power between -1,1 while retaining relative speed percentage
-                rightPower = rightPower / max;
-                leftPower = leftPower / max;
-            }
-
-            telemetry.addData("error", angleError);
-            telemetry.addData("correction", correction);
-            telemetry.addData("rightPower", rightPower);
-            telemetry.addData("leftPower", leftPower);
-            //telemetry.addData("kP", controller.getkP());
-            //telemetry.addData("rightEncoder", bot.wheel1.getCurrentPosition());
-            //telemetry.addData("distance", distance);
-            //telemetry.addData("Current angle:", orientation.thirdAngle);
-            telemetry.update();
-            wheel1.setPower(rightPower);
-            wheel4.setPower(rightPower);
-            wheel2.setPower(leftPower);
-            wheel3.setPower(leftPower);
-        }
-
-        telemetry.addData("distance travelled left: ", wheel2.getCurrentPosition() - leftStart);
-        telemetry.addData("distance travelled right: ", wheel1.getCurrentPosition() - rightStart);
-        telemetry.update();
-
-        wheel1.setPower(0);
-        wheel4.setPower(0);
-        wheel2.setPower(0);
-        wheel3.setPower(0);
-    }
-
-    // maxSpeed should be between 0 and 1, everything else is the same.
-    private void gyroTurn(double targetAngle, double maxSpeed, double distance, double timeout) {
-        maxSpeed = Math.abs(maxSpeed); // make sure speed is positive
-
-        // Ethan: if you're getting odd values from this controller, switch the below line to: PController controller = new PController(TURN_kP);
-        // Read the notes next to TURN_kP if you're still having trouble
-        //PIDController controller = new PIDController(TURN_kP, TURN_kI, TURN_kD);
-        PIDController controller = new PIDController(TURN_kP, 0, 0);
-
-        distance = distance * TICKS_PER_INCH;
-
-        wheel1.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-        wheel2.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-        wheel3.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-        wheel4.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-
-        double rightStart = bot.frontRight.getCurrentPosition(); // top right
-        double leftStart = bot.frontLeft.getCurrentPosition(); // top left
-
-        double startTime = time;
-
-        Orientation orientation = bot.imu.getAngularOrientation(AxesReference.EXTRINSIC, AxesOrder.XYZ, AngleUnit.DEGREES);
-        double angle = orientation.thirdAngle;
-        double lastAngle = angle;
-        double error;
-        int count = 0;
-
-        while (Math.abs(wheel1.getCurrentPosition() - rightStart) < distance
-                && Math.abs(wheel2.getCurrentPosition() - leftStart) < distance
-                && angle != targetAngle
-                && opModeIsActive()) {
-
-            if (time > startTime + timeout) { // timeout
-                telemetry.addLine("Drive loop timeout.");
-                break;
-            }
-
-            orientation = bot.imu.getAngularOrientation(AxesReference.EXTRINSIC, AxesOrder.XYZ, AngleUnit.DEGREES);
-            angle = orientation.thirdAngle;
-            if (targetAngle - angle > 180) {
-                error = targetAngle - (angle + 360);
-            } else if (targetAngle - angle < -180) {
-                error = targetAngle - (angle - 360);
-            } else {
-                error = targetAngle - angle;
-            }
-
-            double correction = controller.calculate(error); //controller.calculate(error);
-            double rightPower = correction * maxSpeed;
-            double leftPower  = -correction * maxSpeed;
-
-            double max = Math.max(Math.abs(rightPower), Math.abs(leftPower));
-            if (max > 1) { // clip the power between -1,1 while retaining relative speed percentage
-                rightPower = rightPower / max;
-                leftPower = leftPower / max;
-            }
-            count += 1;
-
-            if (Math.abs(error) < 5) {
-                telemetry.addLine("error near");
-            }
-//            telemetry.addData("loop count", count);
-            telemetry.addLine("error: " + error + "; angle: " + angle);
-//            telemetry.addData("Angle", angle);
-//            telemetry.addData("correction", correction);
-//            telemetry.addData("rightPower", rightPower);
-//            telemetry.addData("leftPower", leftPower);
-            telemetry.update();
-
-            wheel1.setPower(rightPower);
-            wheel4.setPower(rightPower);
-            wheel2.setPower(leftPower);
-            wheel3.setPower(leftPower);
-        }
-
-        wheel1.setPower(0);
-        wheel4.setPower(0);
-        wheel2.setPower(0);
-        wheel3.setPower(0);
+        robot.update();
     }
 
     static class StageSwitchingPipeline extends OpenCvPipeline
