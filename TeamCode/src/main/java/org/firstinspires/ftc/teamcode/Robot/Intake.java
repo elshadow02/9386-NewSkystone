@@ -2,6 +2,7 @@ package org.firstinspires.ftc.teamcode.Robot;
 
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.Gamepad;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.Servo;
@@ -27,6 +28,7 @@ public class Intake {
     public Intake(HardwareMap hwMap, OpMode opmode){
         intakeLeft = hwMap.get(DcMotor.class, "iL");
         intakeRight = hwMap.get(DcMotor.class, "iR");
+        intakeLeft.setDirection(DcMotorSimple.Direction.REVERSE);
         intakeLeft.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         intakeRight.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
 

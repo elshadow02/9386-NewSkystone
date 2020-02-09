@@ -10,6 +10,7 @@ import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.PIDFCoefficients;
+import com.qualcomm.robotcore.hardware.TouchSensor;
 import com.qualcomm.robotcore.util.Range;
 
 /*
@@ -35,6 +36,8 @@ import com.qualcomm.robotcore.util.Range;
         public static double kd = 0.0;
 
         public DcMotorEx arm      = null;
+        public TouchSensor down = null;
+        public TouchSensor up = null;
 
         public PIDController pid = new PIDController(kp, ki, kd);
 
@@ -48,6 +51,8 @@ import com.qualcomm.robotcore.util.Range;
         public static int start = 0;
 
         double startMotorPos;
+
+        public int maxPosition = 1000000;
 
         public int loopCount = 0;
 
@@ -63,6 +68,9 @@ import com.qualcomm.robotcore.util.Range;
             ticksPerAngle = (arm.getMotorType().getTicksPerRev()*gearRatio)/360;
 
             startMotorPos = arm.getCurrentPosition();
+
+            down = hardwareMap.get(TouchSensor.class, "down");
+            up = hardwareMap.get(TouchSensor.class, "up");
         }
 
         @Override
@@ -87,6 +95,10 @@ import com.qualcomm.robotcore.util.Range;
 
             int newAngle = (int)(angle*ticksPerAngle);
 
+            if(newAngle >= maxPosition){
+                newAngle = maxPosition;
+            }
+
             arm.setTargetPosition(newAngle);
 
             if (arm.getMode() != DcMotor.RunMode.RUN_TO_POSITION){
@@ -94,8 +106,19 @@ import com.qualcomm.robotcore.util.Range;
             }
 
 
-
-            if ((arm.getTargetPosition() - arm.getCurrentPosition()) < 325){
+            if(down.isPressed()){
+                arm.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+            }
+            else if(up.isPressed()){
+                maxPosition = arm.getCurrentPosition();
+                if(arm.getTargetPosition() < arm.getCurrentPosition()){
+                    arm.setPower(0.2);
+                }
+                else{
+                    arm.setPower(0);
+                }
+            }
+            else if ((arm.getTargetPosition() - arm.getCurrentPosition()) < 325){
                 arm.setPower(0.2);
             }
             else {
@@ -103,7 +126,7 @@ import com.qualcomm.robotcore.util.Range;
             }
 
             telemetry.addData("Arm Power", arm.getPower());
-            telemetry.addData("Arm Power", arm.getVelocity());
+            telemetry.addData("Arm Velocity", arm.getVelocity());
             telemetry.update();
 
 //            angle *= ticksPerAngle;

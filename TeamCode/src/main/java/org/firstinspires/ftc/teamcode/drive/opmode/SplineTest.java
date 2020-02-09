@@ -28,48 +28,19 @@ public class SplineTest extends LinearOpMode {
         iR = hardwareMap.get(DcMotor.class, "iR");
         iL.setDirection(DcMotorSimple.Direction.REVERSE);
 
-        drive.setPoseEstimate(new Pose2d(-13, -62.5, 0.5*Math.PI));
+        drive.setPoseEstimate(new Pose2d(0, 0, Math.PI));
 
         waitForStart();
 
         if (isStopRequested()) return;
 
-        drive.followTrajectorySync(
-                drive.trajectoryBuilder()
-                        .splineTo(new Pose2d(-28, -20, 0.75*Math.PI))
-                        .addMarker(new Vector2d(-20, -43), () -> {
-                            iL.setPower(1);
-                            iR.setPower(1);
-                            return Unit.INSTANCE;
-                        })
-//                        .lineTo(new Vector2d(-28, -15))
-                        .build()
-        );
-
-        iL.setPower(0);
-        iR.setPower(0);
+        iL.setPower(1);
+        iR.setPower(1);
 
         drive.followTrajectorySync(
                 drive.trajectoryBuilder()
-                .reverse().splineTo(new Pose2d(20, -40, Math.PI))
+                        .splineTo(new Pose2d(-29, -20, 0.5*Math.PI))
                         .build()
         );
-
-        //sleep(2000);
-
-//        drive.followTrajectorySync(
-//                drive.trajectoryBuilder()
-//                        .splineTo(new Pose2d(30, 30, 0))
-//                        .build()
-//        );
-//
-//        sleep(2000);
-//
-//        drive.followTrajectorySync(
-//                drive.trajectoryBuilder()
-//                .reverse()
-//                .splineTo(new Pose2d(0, 0, 0))
-//                .build()
-//        );
     }
 }

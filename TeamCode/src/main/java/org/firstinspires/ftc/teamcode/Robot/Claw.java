@@ -43,10 +43,20 @@ public class Claw {
         switch(mode){
             case GRAB:
                 claw.setPosition(0.04);
+                break;
             case INTAKE:
                 claw.setPosition(0.5);
+                break;
+            case TELEOP:
+                if (pad.x) {
+                    mode = ClawMode.GRAB;
+                }
+                if (pad.b) {
+                    mode = ClawMode.INTAKE;
+                }
             default:
                 //Do nothing
+                break;
         }
     }
 }

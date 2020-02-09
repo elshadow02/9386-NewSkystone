@@ -17,5 +17,5 @@ public enum class IntakeMode{
 }
 
 public enum class ClawMode{
-    INTAKE, GRAB, STOP, AUTO
+    INTAKE, GRAB, STOP, AUTO, TELEOP
 }

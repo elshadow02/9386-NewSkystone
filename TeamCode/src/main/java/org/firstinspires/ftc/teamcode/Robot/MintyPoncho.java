@@ -34,6 +34,10 @@ public class MintyPoncho {
         return this.mode;
     }
 
+    public int liftPos(){
+        return lift.getLiftPosition();
+    }
+
     public void update(){
         switch(mode){
             case STOP:
@@ -43,6 +47,7 @@ public class MintyPoncho {
                 intake.setMode(IntakeMode.STOP);
                 claw.setMode(ClawMode.STOP);
                 grabber.setMode(IntakeMode.STOP);
+                break;
             case TURTLE_MODE:
                 drive.setDriveMode(DriveMode.TURTLE_SPEED);
                 arm.setMode(MotorMode.CONTROLLED);
@@ -50,13 +55,15 @@ public class MintyPoncho {
                 lift.setMode(MotorMode.CONTROLLED);
                 claw.setMode(ClawMode.INTAKE);
                 grabber.setMode(IntakeMode.TELEOP);
+                break;
             case BEAST_MODE:
                 drive.setDriveMode(DriveMode.MECANUM);
-                arm.setMode(MotorMode.CONTROLLED);
+                //arm.setMode(MotorMode.CONTROLLED);
                 intake.setMode(IntakeMode.TELEOP);
-                lift.setMode(MotorMode.CONTROLLED);
-                claw.setMode(ClawMode.INTAKE);
+                //lift.setMode(MotorMode.CONTROLLED);
+                claw.setMode(ClawMode.TELEOP);
                 grabber.setMode(IntakeMode.TELEOP);
+                break;
         }
 
         arm.update();

@@ -149,6 +149,7 @@ public class OldTeleop extends LinearOpMode {
             telemetry.addData("FR Encoder: ", robot.frontRight.getCurrentPosition());
             telemetry.addData("BL Encoder: ", robot.backLeft.getCurrentPosition());
             telemetry.addData("BR Encoder: ", robot.backRight.getCurrentPosition());
+            telemetry.addData("arm pos: ", robot.arm.getCurrentPosition());
             telemetry.update();
 
         }

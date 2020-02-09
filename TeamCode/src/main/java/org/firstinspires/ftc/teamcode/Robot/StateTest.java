@@ -27,6 +27,7 @@ public class StateTest extends LinearOpMode {
             mintyPoncho.update();
 
             telemetry.addData("Mode", mintyPoncho.getMode());
+            telemetry.addData("Lift pos", mintyPoncho.liftPos());
             telemetry.update();
 
         }

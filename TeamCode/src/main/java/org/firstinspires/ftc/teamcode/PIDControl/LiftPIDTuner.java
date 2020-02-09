@@ -6,6 +6,8 @@ import com.acmerobotics.dashboard.telemetry.MultipleTelemetry;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.hardware.DcMotorEx;
+import com.qualcomm.robotcore.hardware.PIDFCoefficients;
 import com.qualcomm.robotcore.hardware.TouchSensor;
 
 /*
@@ -27,32 +29,32 @@ import com.qualcomm.robotcore.hardware.TouchSensor;
 
         public static double maxPower = 1;
 
-        public static double kp = 1;
+        public static double kp = 9;
         public static double ki = 0.0;
         public static double kd = 0.0;
 
-        public DcMotor lift     = null;
+        public DcMotorEx lift     = null;
         public TouchSensor down = null;
         public TouchSensor up = null;
 
         public PIDController pid = new PIDController(kp, ki, kd);
 
         //The gear ratio between the motor and the gear powering the lead screw
-        public static double gearRatio = 1;
+        public static double gearRatio = 2;
 
         //The increase in lead screw position per rotation of the screw
         public double lead = 8;
 
         //How far the cascading slides can fully extend
-        public double fullLiftExtension = 72;
+        public double fullLiftExtension = 37.25;
 
         //How much distance between lowest point on the lead screw and the highest point
-        public double fullScrewDistance = 14;
+        public double fullScrewDistance = 9.25;
 
         //Motor encoder ticks per inch of vertical distance for the slides
-        public double ticksPerInch = 1;
+        public static double ticksPerInch = 1;
 
-        public double screwMovementPerLiftInch = fullScrewDistance/fullLiftExtension;
+        public double screwMovementPerLiftInch = fullLiftExtension/fullScrewDistance;
 
         public double screwTicksPerInch = 1;
 
@@ -60,13 +62,17 @@ import com.qualcomm.robotcore.hardware.TouchSensor;
 
         double startMotorPos;
 
+        private int maxPosition = 1000000000;
+
+        private boolean recentlyChanged = false;
+
         public int loopCount = 0;
 
 
         @Override // @Override tells the computer we intend to override OpMode's method init()
         public void init() {
             telemetry = new MultipleTelemetry(telemetry, FtcDashboard.getInstance().getTelemetry());
-            lift = hardwareMap.get(DcMotor.class, "lift");
+            lift = (DcMotorEx)hardwareMap.get(DcMotor.class, "lift");
             lift.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
             lift.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
 
@@ -77,9 +83,9 @@ import com.qualcomm.robotcore.hardware.TouchSensor;
 
             screwTicksPerInch = (lift.getMotorType().getTicksPerRev()*gearRatio)/lead;
 
-            ticksPerInch = screwTicksPerInch * screwMovementPerLiftInch;
+            ticksPerInch = 240;
 
-            ticksPerInch = (lift.getMotorType().getTicksPerRev()*gearRatio)/360;
+            //ticksPerInch = (lift.getMotorType().getTicksPerRev()*gearRatio)/360;
 
             startMotorPos = lift.getCurrentPosition();
         }
@@ -90,7 +96,10 @@ import com.qualcomm.robotcore.hardware.TouchSensor;
             pid.setkI(ki);
             pid.setkD(kd);
 
-            telemetry.addData("Distance to travel: ", travel);
+            lift.setPIDFCoefficients(DcMotor.RunMode.RUN_TO_POSITION, new PIDFCoefficients(kp, 0, 0, 0));
+
+            telemetry.addData("Distance to travel: ", travel * ticksPerInch);
+            telemetry.addData("Ticks Per INCH", ticksPerInch);
             telemetry.addData("Encoder Value: ", lift.getCurrentPosition());
             telemetry.update();
 
@@ -100,39 +109,46 @@ import com.qualcomm.robotcore.hardware.TouchSensor;
         }
 
         public void setPosition(double distance){
-            distance *= ticksPerInch;
 
-            double output;
+            int newAngle = (int)(distance*ticksPerInch);
 
-            double error;
-
-
-            error = distance - (lift.getCurrentPosition() - startMotorPos);
-
-            //output = error * kp;
-            output = pid.calculate(error);
-
-            if(!down.isPressed() && !up.isPressed()) {
-                lift.setPower(output);
+            if(newAngle >= maxPosition){
+                newAngle = maxPosition;
             }
-            else if(down.isPressed() && output < 0){
+
+            lift.setTargetPosition(newAngle);
+
+            if (lift.getMode() != DcMotor.RunMode.RUN_TO_POSITION ){
+                lift.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+            }
+
+
+            if(down.isPressed() && !recentlyChanged){
                 lift.setPower(0);
+                lift.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+                recentlyChanged = true;
             }
-            else if(up.isPressed() && output > 0){
-                lift.setPower(0);
+            else if(up.isPressed()){
+                maxPosition = lift.getCurrentPosition();
+                if(lift.getTargetPosition() < lift.getCurrentPosition()){
+                    lift.setPower(0.2);
+                }
+                else{
+                    lift.setPower(0);
+                }
             }
-            else{
-                telemetry.addLine("Argh! SOmethign wrng");
-                telemetry.update();
+//            else if ((lift.getTargetPosition() - lift.getCurrentPosition()) < 75){
+//                lift.setPower(1.0);
+//                recentlyChanged = false;
+//            }
+            else {
+                lift.setPower(maxPower);
+                if(!down.isPressed()) {
+                    recentlyChanged = false;
+                }
             }
 
-            telemetry.addData("Encoder target: ", distance);
-            telemetry.addData("Error: ", error);
-            telemetry.addData("Output: ", output);
-            telemetry.addData("kp: ", kp);
-            telemetry.addData("ki: ", ki);
-            telemetry.addData("kd: ", kd);
-            telemetry.addData("loop count: ", loopCount);
+            telemetry.addData("Arm Power", lift.getPower());
             telemetry.update();
             loopCount += 1;
         }
