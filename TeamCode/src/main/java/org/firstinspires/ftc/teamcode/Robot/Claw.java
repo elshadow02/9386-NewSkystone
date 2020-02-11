@@ -27,7 +27,7 @@ public class Claw {
     }
 
     public void intake(){
-        claw.setPosition(0.5);
+        claw.setPosition(0.7);
     }
 
     public void update(){
@@ -45,7 +45,7 @@ public class Claw {
                 claw.setPosition(0.04);
                 break;
             case INTAKE:
-                claw.setPosition(0.5);
+                claw.setPosition(0.7);
                 break;
             case TELEOP:
                 if (pad.x) {

@@ -76,20 +76,9 @@ public class RQPTest1 extends LinearOpMode {
         claw.grab();
 
 
-//        drive.followTrajectory(drive.trajectoryBuilder()
-//                .splineTo(new Pose2d(27, -45, Math.PI))
-//                .back(12)
-//                .build()
-//        );
-
-        drive.followTrajectorySync(drive.trajectoryBuilder()
-                .strafeRight(16)
-                .build()
-        );
-
         drive.followTrajectory(drive.trajectoryBuilder()
                 .splineTo(new Pose2d(27, -45, Math.PI))
-                .back(22)
+                .back(12)
                 .build()
         );
 

@@ -69,13 +69,18 @@ public class RedQuarryPathsTest extends LinearOpMode {
                 drive.trajectoryBuilder()
                         .reverse().splineTo(new Pose2d(0, -40, Math.PI))
                         .splineTo(new Pose2d(45, -23, 1.5*Math.PI))
-                        .addMarker(new Vector2d(35, -33), () -> {
-                            fL.setPosition(0);
+                        .addMarker(new Vector2d(45, -21), () -> {
+                            fL.setPosition(1.0);
                             fR.setPosition(0);
                             return Unit.INSTANCE;
                         })
                         .build()
         );
+
+        fL.setPosition(1.0);
+        fR.setPosition(0);
+
+        sleep(1500);
 
         iL.setPower(0);
         iR.setPower(0);
@@ -102,8 +107,8 @@ public class RedQuarryPathsTest extends LinearOpMode {
 
         arm.intake();
 
-//        fL.setPosition(1.0);
-//        fR.setPosition(1.0);
+        fL.setPosition(0.0);
+        fR.setPosition(1.0);
 
         iL.setPower(0.8);
         iR.setPower(0.8);
