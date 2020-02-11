@@ -133,7 +133,7 @@ public class BlueQuarryAuto extends LinearOpMode {
         }
 
         if (valLeft == 0 && valMid > 0 && valRight > 0){
-            robot.setMode(RobotMode.STOP);
+            robot.setMode(RobotMode.RED_QUARRY_AUTO3);
         }
         else if (valLeft > 0 && valMid == 0 && valRight > 0){
             robot.setMode(RobotMode.RED_QUARRYAUTO2);
