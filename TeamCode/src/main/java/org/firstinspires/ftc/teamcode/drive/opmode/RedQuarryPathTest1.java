@@ -4,9 +4,6 @@ import com.acmerobotics.roadrunner.geometry.Pose2d;
 import com.acmerobotics.roadrunner.geometry.Vector2d;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
-import com.qualcomm.robotcore.hardware.DcMotor;
-import com.qualcomm.robotcore.hardware.DcMotorSimple;
-import com.qualcomm.robotcore.hardware.Servo;
 
 import org.firstinspires.ftc.teamcode.Robot.Arm;
 import org.firstinspires.ftc.teamcode.Robot.Claw;
@@ -23,8 +20,8 @@ import kotlin.Unit;
 /*
  * This is an example of a more complex path to really test the tuning.
  */
-@Autonomous(group = "RedQuarryPaths")
-public class RedQuarryPathsTest extends LinearOpMode {
+@Autonomous(group = "drive")
+public class RedQuarryPathTest1 extends LinearOpMode {
 
     @Override
     public void runOpMode() throws InterruptedException {
@@ -49,36 +46,43 @@ public class RedQuarryPathsTest extends LinearOpMode {
 
         drive.followTrajectorySync(
                 drive.trajectoryBuilder()
-                        .splineTo(new Pose2d(-33.5, -20, 0.5*Math.PI))
+                        .splineTo(new Pose2d(-25, -22, 0.5*Math.PI))
                         .build()
         );
 
         drive.followTrajectorySync(
                 drive.trajectoryBuilder()
-                        .reverse().splineTo(new Pose2d(0, -40, Math.PI))
-                        .splineTo(new Pose2d(45, -23, 1.5*Math.PI))
-                        .addMarker(new Vector2d(40, -28), () -> {
+                .reverse().splineTo(new Pose2d(0, -46, Math.PI))
+                        .splineTo(new Pose2d(52, -22, 1.5*Math.PI))
+                        .addMarker(new Vector2d(49, -24), () -> {
                             grabber.setMode(IntakeMode.OUT);
                             grabber.update();
-                            claw.grab();
                             return Unit.INSTANCE;
                         })
+                        .lineTo(new Vector2d(52, -17))
                         .build()
         );
 
+        sleep(250);
+
         intake.setMode(IntakeMode.STOP);
         intake.update();
+        claw.grab();
 
         drive.followTrajectory(drive.trajectoryBuilder()
-                .splineTo(new Pose2d(35, -45, Math.PI))
+                .splineTo(new Pose2d(27, -45, Math.PI))
                 .back(12)
                 .build()
         );
+
+        arm.stack();
 
         while(drive.isBusy()){
             arm.stack();
             drive.update();
         }
+
+
 
         claw.intake();
 
@@ -93,16 +97,16 @@ public class RedQuarryPathsTest extends LinearOpMode {
         intake.update();
 
         drive.followTrajectorySync(drive.trajectoryBuilder()
-                .splineTo(new Pose2d(-52, -15, 0.5*Math.PI))
+                .splineTo(new Pose2d(-41, -15, 0.5*Math.PI))
                 .build()
         );
 
         drive.followTrajectorySync(drive.trajectoryBuilder()
-                .reverse().splineTo(new Pose2d(45, -53, Math.PI))
-                .addMarker(new Vector2d(0, -30), () -> {
+                .reverse().splineTo(new Pose2d(45, -35, Math.PI))
+                .addMarker(new Vector2d(0, -32), () -> {
+                    claw.grab();
                     intake.setMode(IntakeMode.STOP);
                     intake.update();
-                    claw.grab();
                     arm.stack();
                     return Unit.INSTANCE;
                 })
@@ -114,19 +118,22 @@ public class RedQuarryPathsTest extends LinearOpMode {
         arm.intake();
         sleep(250);
         intake.setMode(IntakeMode.PULL);
+        intake.update();claw.intake();
+        arm.intake();
+        intake.setMode(IntakeMode.PULL);
         intake.update();
 
         drive.followTrajectorySync(drive.trajectoryBuilder()
-                .splineTo(new Pose2d(-21, -15, 0.5*Math.PI))
+                .splineTo(new Pose2d(-28, -13, 0.5*Math.PI))
                 .build()
         );
 
         drive.followTrajectorySync(drive.trajectoryBuilder()
-                .reverse().splineTo(new Pose2d(45, -65, Math.PI))
-                .addMarker(new Vector2d(0, -35), () -> {
+                .reverse().splineTo(new Pose2d(45, -35, Math.PI))
+                .addMarker(new Vector2d(0, -32), () -> {
+                    claw.grab();
                     intake.setMode(IntakeMode.STOP);
                     intake.update();
-                    claw.grab();
                     arm.stack();
                     return Unit.INSTANCE;
                 })
