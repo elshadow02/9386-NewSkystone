@@ -1,33 +1,14 @@
 package org.firstinspires.ftc.teamcode.Auto;
 
-import android.graphics.Bitmap;
-
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.util.ElapsedTime;
-import com.qualcomm.robotcore.util.RobotLog;
-import com.qualcomm.robotcore.util.ThreadPool;
-import com.vuforia.Frame;
 
-import org.firstinspires.ftc.robotcore.external.ClassFactory;
-import org.firstinspires.ftc.robotcore.external.function.Consumer;
-import org.firstinspires.ftc.robotcore.external.function.Continuation;
 import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
-import org.firstinspires.ftc.robotcore.external.matrices.OpenGLMatrix;
-import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
-import org.firstinspires.ftc.robotcore.external.navigation.AxesOrder;
-import org.firstinspires.ftc.robotcore.external.navigation.AxesReference;
-import org.firstinspires.ftc.robotcore.external.navigation.Orientation;
-import org.firstinspires.ftc.robotcore.external.navigation.VuforiaLocalizer;
-import org.firstinspires.ftc.robotcore.external.navigation.VuforiaTrackable;
-import org.firstinspires.ftc.robotcore.external.navigation.VuforiaTrackableDefaultListener;
-import org.firstinspires.ftc.robotcore.external.navigation.VuforiaTrackables;
-import org.firstinspires.ftc.robotcore.internal.system.AppUtil;
 
-import org.firstinspires.ftc.teamcode.Robot.MintyPoncho;
+import org.firstinspires.ftc.teamcode.Robot.MintyPancho;
 import org.firstinspires.ftc.teamcode.Robot.RobotMode;
-import org.firstinspires.ftc.teamcode.TeleOp.EEHardware;
 //import org.firstinspires.ftc.teamcode.VuforiaTesting.VuforiaImpPlus;
 import org.opencv.core.Core;
 import org.opencv.core.Mat;
@@ -40,14 +21,8 @@ import org.openftc.easyopencv.OpenCvCameraFactory;
 import org.openftc.easyopencv.OpenCvCameraRotation;
 import org.openftc.easyopencv.OpenCvPipeline;
 
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Locale;
-
-import org.firstinspires.ftc.teamcode.PIDControl.PIDController;
 
 @Autonomous(name="StateRedQuarryAutoTest", group ="Concept")
 public class BlueQuarryAuto extends LinearOpMode {
@@ -97,7 +72,7 @@ public class BlueQuarryAuto extends LinearOpMode {
 
     @Override
     public void runOpMode() throws InterruptedException {
-        MintyPoncho robot = new MintyPoncho(this);
+        MintyPancho robot = new MintyPancho(this);
 
         robot.setMode(RobotMode.STOP);
 

@@ -108,6 +108,8 @@ public class Lift {
 
     public void initPosition() { setDistance(1);}
 
+    public boolean isBusy(){ return lift.isBusy(); }
+
     public void setDistance(double distance){
         if(getMode() == MotorMode.RUN_TO_POSITION || getMode() == MotorMode.AUTO) {
             int newAngle = (int) (distance * ticksPerInch);
@@ -209,6 +211,9 @@ public class Lift {
                 break;
             case STOP:
                 setPower(0);
+                break;
+            case AUTO:
+                //do nothing
                 break;
         }
     }

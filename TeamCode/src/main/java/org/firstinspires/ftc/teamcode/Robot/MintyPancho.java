@@ -10,7 +10,7 @@ import org.firstinspires.ftc.teamcode.drive.mecanum.SampleMecanumDriveREVOptimiz
 
 import kotlin.Unit;
 
-public class MintyPoncho {
+public class MintyPancho {
     private RobotMode mode = RobotMode.STOP;
     private LinearOpMode lopMode = null;
 
@@ -21,7 +21,7 @@ public class MintyPoncho {
     private Claw claw = null;
     private FoundationGrabber grabber= null;
 
-    public MintyPoncho(LinearOpMode opmode){
+    public MintyPancho(LinearOpMode opmode){
         arm = new Arm(opmode.hardwareMap, opmode);
         lift = new Lift(opmode.hardwareMap, opmode);
         intake = new Intake(opmode.hardwareMap, opmode);
