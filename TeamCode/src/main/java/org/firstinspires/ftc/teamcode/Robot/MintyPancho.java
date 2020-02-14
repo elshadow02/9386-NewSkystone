@@ -278,6 +278,7 @@ public class MintyPancho {
             drive.followTrajectorySync(drive.trajectoryBuilder()
                     .splineTo(new Pose2d(27, -45, Math.PI))
                     .addMarker(() -> {
+                        lopMode.sleep(100);
                         claw.intake();
 
                         arm.intake();
@@ -285,6 +286,7 @@ public class MintyPancho {
                         grabber.setMode(IntakeMode.PREMATCH);
                         grabber.update();
 
+                        intake.setMaxPower(0.6);
                         intake.setMode(IntakeMode.PULL);
                         intake.update();
 
@@ -294,7 +296,7 @@ public class MintyPancho {
                     .build()
             );
 
-            lopMode.sleep(200);
+            lopMode.sleep(150);
 
             drive.followTrajectorySync(drive.trajectoryBuilder()
                     .splineTo(new Pose2d(0, -39, Math.PI))
@@ -316,6 +318,8 @@ public class MintyPancho {
                     .build()
             );
 
+            lopMode.sleep(200);
+
             claw.intake();
             lopMode.sleep(150);
             arm.intake();
@@ -323,6 +327,7 @@ public class MintyPancho {
             intake.setMode(IntakeMode.PULL);
             intake.update();claw.intake();
             arm.intake();
+            intake.setMaxPower(0.6);
             intake.setMode(IntakeMode.PULL);
             intake.update();
 
@@ -363,12 +368,14 @@ public class MintyPancho {
             arm.setMode(MotorMode.AUTO);
             arm.setPower(0);
             intake.setMaxPower(1.0);
+            lift.setMode(MotorMode.AUTO);
             claw.setMode(ClawMode.AUTO);
             drive.setPoseEstimate(new Pose2d(-13, -62.5, 0.5 * Math.PI));
 
             claw.intake();
             intake.setMode(IntakeMode.OUT);
             intake.update();
+            lift.downPosition();
 
             drive.followTrajectorySync(
                     drive.trajectoryBuilder()
@@ -485,12 +492,14 @@ public class MintyPancho {
             arm.setMode(MotorMode.AUTO);
             arm.setPower(0);
             intake.setMaxPower(1.0);
+            lift.setMode(MotorMode.AUTO);
             claw.setMode(ClawMode.AUTO);
             drive.setPoseEstimate(new Pose2d(-13, -62.5, 0.5 * Math.PI));
 
             claw.intake();
             intake.setMode(IntakeMode.OUT);
             intake.update();
+            lift.downPosition();
 
             drive.followTrajectorySync(
                     drive.trajectoryBuilder()
@@ -617,12 +626,14 @@ public class MintyPancho {
                 arm.setMode(MotorMode.AUTO);
                 arm.setPower(0);
                 intake.setMaxPower(1.0);
+                lift.setMode(MotorMode.AUTO);
                 claw.setMode(ClawMode.AUTO);
                 drive.setPoseEstimate(new Pose2d(-13, 62.5, 1.5 * Math.PI));
 
                 claw.intake();
                 intake.setMode(IntakeMode.OUT);
                 intake.update();
+                lift.downPosition();
 
                 drive.followTrajectorySync(
                         drive.trajectoryBuilder()
@@ -737,12 +748,14 @@ public class MintyPancho {
                 arm.setMode(MotorMode.AUTO);
                 arm.setPower(0);
                 intake.setMaxPower(1.0);
+                lift.setMode(MotorMode.AUTO);
                 claw.setMode(ClawMode.AUTO);
                 drive.setPoseEstimate(new Pose2d(-13, 62.5, 1.5 * Math.PI));
 
                 claw.intake();
                 intake.setMode(IntakeMode.OUT);
                 intake.update();
+                lift.downPosition();
 
                 drive.followTrajectorySync(
                         drive.trajectoryBuilder()
@@ -858,11 +871,13 @@ public class MintyPancho {
                 arm.setPower(0);
                 intake.setMaxPower(1.0);
                 claw.setMode(ClawMode.AUTO);
+                lift.setMode(MotorMode.AUTO);
                 drive.setPoseEstimate(new Pose2d(-13, 62.5, 1.5 * Math.PI));
 
                 claw.intake();
                 intake.setMode(IntakeMode.OUT);
                 intake.update();
+                lift.downPosition();
 
                 drive.followTrajectorySync(
                         drive.trajectoryBuilder()

@@ -6,8 +6,10 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
+
 import org.firstinspires.ftc.teamcode.Robot.MintyPancho;
 import org.firstinspires.ftc.teamcode.Robot.RobotMode;
+//import org.firstinspires.ftc.teamcode.VuforiaTesting.VuforiaImpPlus;
 import org.opencv.core.Core;
 import org.opencv.core.Mat;
 import org.opencv.core.MatOfPoint;
@@ -22,10 +24,8 @@ import org.openftc.easyopencv.OpenCvPipeline;
 import java.util.ArrayList;
 import java.util.List;
 
-//import org.firstinspires.ftc.teamcode.VuforiaTesting.VuforiaImpPlus;
-
-@Autonomous(name="BlueQuarryAuto", group ="Concept")
-public class BlueQuarryAuto extends LinearOpMode {
+@Autonomous(name="RedQuarryAuto", group ="Concept")
+public class RedQuarryAuto extends LinearOpMode {
 
     //EEHardware bot = new EEHardware();
 
@@ -116,13 +116,13 @@ public class BlueQuarryAuto extends LinearOpMode {
         }
 
         if (valLeft == 0 && valMid > 0 && valRight > 0){
-            robot.setMode(RobotMode.BLUE_QUARRY_AUTO1);
+            robot.setMode(RobotMode.RED_QUARRY_AUTO3);
         }
         else if (valLeft > 0 && valMid == 0 && valRight > 0){
-            robot.setMode(RobotMode.BLUE_QUARRY_AUTO2);
+            robot.setMode(RobotMode.RED_QUARRYAUTO2);
         }
         else if (valLeft > 0 && valMid > 0 && valRight == 0){
-            robot.setMode(RobotMode.BLUE_QUARRY_AUTO3);
+            robot.setMode(RobotMode.RED_QUARRY_AUTO1);
         }
         else{
             telemetry.addData("Something went ", "Super Duper wrong.");
