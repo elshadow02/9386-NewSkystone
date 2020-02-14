@@ -11,11 +11,12 @@ public class PreMatchSetup extends LinearOpMode {
     public void runOpMode () {
 
         Lift lift = new Lift(hardwareMap, this);
+        lift.reset();
 
         waitForStart();
 
         lift.setMode(MotorMode.AUTO);
-        lift.initPosition();
+        lift.nextPosition();
 
         while(lift.isBusy()){
             telemetry.addLine("New line");

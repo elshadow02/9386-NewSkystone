@@ -3,6 +3,7 @@ package org.firstinspires.ftc.teamcode.PIDControl;
 import com.acmerobotics.dashboard.FtcDashboard;
 import com.acmerobotics.dashboard.config.Config;
 import com.acmerobotics.dashboard.telemetry.MultipleTelemetry;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
@@ -13,6 +14,7 @@ import com.qualcomm.robotcore.hardware.DcMotor;
  * Base OpMode for tuning the PID loop for a motor using the FTC Dashboard.
  */
 
+@Disabled
 @TeleOp(name="PIDTuner")
 @Config
     public class PIDTuner extends OpMode {

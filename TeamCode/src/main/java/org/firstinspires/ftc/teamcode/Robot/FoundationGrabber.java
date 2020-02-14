@@ -48,7 +48,7 @@ public class FoundationGrabber {
         switch(mode){
             case PREMATCH:
                 foundL.setPosition(0.0);
-                foundR.setPosition(1.0);
+                foundR.setPosition(0.6);
                 break;
             case TELEOP:
                 if(gamepad.a){
@@ -57,7 +57,7 @@ public class FoundationGrabber {
                 }
                 if(gamepad.x){
                     foundL.setPosition(0.0);
-                    foundR.setPosition(1.0);
+                    foundR.setPosition(0.6);
                 }
                 break;
             case OUT:

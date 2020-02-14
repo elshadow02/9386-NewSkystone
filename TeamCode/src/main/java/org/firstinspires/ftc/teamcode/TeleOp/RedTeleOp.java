@@ -1,12 +1,14 @@
-package org.firstinspires.ftc.teamcode.Robot;
+package org.firstinspires.ftc.teamcode.TeleOp;
 
-import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
-@Disabled
-@TeleOp(name="StateTest")
-public class StateTest extends LinearOpMode {
+import org.firstinspires.ftc.teamcode.Robot.MintyPancho;
+import org.firstinspires.ftc.teamcode.Robot.RobotMode;
+
+
+@TeleOp(name="RedTeleOp")
+public class RedTeleOp extends LinearOpMode {
 
     @Override
     public void runOpMode () {

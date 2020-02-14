@@ -3,6 +3,7 @@ package org.firstinspires.ftc.teamcode.PIDControl
 import com.acmerobotics.dashboard.FtcDashboard
 import com.acmerobotics.dashboard.config.Config
 import com.acmerobotics.dashboard.telemetry.MultipleTelemetry
+import com.qualcomm.robotcore.eventloop.opmode.Disabled
 import com.qualcomm.robotcore.eventloop.opmode.OpMode
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp
 import com.qualcomm.robotcore.hardware.DcMotor
@@ -17,6 +18,7 @@ import com.qualcomm.robotcore.hardware.DcMotor
  * the PID variables until the current position reaches the target without oscillation.
  */
 
+@Disabled
 @TeleOp(name = "ArmPIDKotlin")
 @Config
 class ArmPIDTunerKotlin : OpMode() {

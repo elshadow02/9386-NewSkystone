@@ -22,13 +22,14 @@ public class Arm {
     //Motor encoder ticks per angle of rotation
     private double ticksPerAngle = 1;
 
-    private double maxPower = 0.9;
+    private double maxPower = 0.5;
 
     private MotorMode mode = MotorMode.STOP;
 
     private Gamepad gamepad = null;
 
     private boolean armIntakePosition = true;
+    private boolean redSide = false;
 
     public Arm(HardwareMap hwMap, OpMode opmode){
         arm = (DcMotorEx)hwMap.get(DcMotor.class, "arm");
@@ -55,6 +56,10 @@ public class Arm {
     public void setPower(double v){
         arm.setPower(v);
 
+    }
+
+    public void setRedSide(boolean redSide) {
+        this.redSide = redSide;
     }
 
     public double getPower(){
@@ -92,28 +97,43 @@ public class Arm {
             }
 
 
-            if ((arm.getTargetPosition() - arm.getCurrentPosition()) < 100) {
-                arm.setPower(0.3);
-            } else {
+
                 arm.setPower(maxPower);
-            }
+
         }
     }
 
     public void update(){
-        if(getMode() != MotorMode.AUTO) {
-            if (gamepad.dpad_right) {
-                setMode(MotorMode.RUN_TO_POSITION);
-                armIntakePosition = true;
-            }
+        if(getMode() != MotorMode.AUTO || getMode() != MotorMode.STOP) {
+            if(!redSide) {
+                if (gamepad.dpad_right) {
+                    setMode(MotorMode.RUN_TO_POSITION);
+                    armIntakePosition = true;
+                }
 
-            if (gamepad.dpad_left) {
-                setMode(MotorMode.RUN_TO_POSITION);
-                armIntakePosition = false;
-            }
+                if (gamepad.dpad_left) {
+                    setMode(MotorMode.RUN_TO_POSITION);
+                    armIntakePosition = false;
+                }
 
-            if (Math.abs(gamepad.right_stick_y) > 0.1 && mode != MotorMode.CONTROLLED) {
-                mode = MotorMode.CONTROLLED;
+                if (Math.abs(gamepad.right_stick_y) > 0.1 && mode != MotorMode.CONTROLLED) {
+                    mode = MotorMode.CONTROLLED;
+                }
+            }
+            if(redSide) {
+                if (gamepad.dpad_right) {
+                    setMode(MotorMode.RUN_TO_POSITION);
+                    armIntakePosition = false;
+                }
+
+                if (gamepad.dpad_left) {
+                    setMode(MotorMode.RUN_TO_POSITION);
+                    armIntakePosition = true;
+                }
+
+                if (Math.abs(gamepad.right_stick_y) > 0.1 && mode != MotorMode.CONTROLLED) {
+                    mode = MotorMode.CONTROLLED;
+                }
             }
         }
 

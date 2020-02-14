@@ -52,7 +52,6 @@ public class Lift {
 
     public Lift(HardwareMap hwMap, OpMode opmode){
         lift = (DcMotorEx)hwMap.get(DcMotor.class, "lift");
-        lift.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         lift.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
 
         down = hwMap.get(TouchSensor.class, "down");
@@ -77,9 +76,13 @@ public class Lift {
         return mode;
     }
 
-    private void setPower(double v){
+    public void setPower(double v){
         lift.setPower(v * maxPower);
 
+    }
+
+    public void reset(){
+        lift.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
     }
 
     public int getLiftPosition(){
@@ -98,8 +101,12 @@ public class Lift {
         return maxPower;
     }
 
-    private void downPosition(){
+    public void downPosition(){
         setDistance(0);
+    }
+
+    public boolean isDown(){
+        return down.isPressed();
     }
 
     public void nextPosition(){
@@ -153,7 +160,7 @@ public class Lift {
     }
 
     public void update(){
-        if (gamepad.right_bumper && liftPosition != 8 && !changed) {
+        if (gamepad.right_bumper && liftPosition != 7 && !changed) {
             liftPosition += 1;
             changed = true;
         }
@@ -169,7 +176,7 @@ public class Lift {
             changed2 = false;
         }
 
-        if(getMode() != MotorMode.AUTO) {
+        if(getMode() != MotorMode.AUTO || getMode() != MotorMode.STOP) {
             if (gamepad.dpad_up) {
                 setMode(MotorMode.RUN_TO_POSITION);
             }

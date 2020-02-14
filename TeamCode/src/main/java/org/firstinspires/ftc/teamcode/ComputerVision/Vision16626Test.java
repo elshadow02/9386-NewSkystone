@@ -2,6 +2,7 @@ package org.firstinspires.ftc.teamcode.ComputerVision;
 
 import com.acmerobotics.dashboard.FtcDashboard;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import org.openftc.easyopencv.OpenCvCamera;
 import android.util.Log;
@@ -12,6 +13,7 @@ import org.openftc.easyopencv.OpenCvCamera;
 import org.openftc.easyopencv.OpenCvCameraFactory;
 import org.openftc.easyopencv.OpenCvCameraRotation;
 
+@Disabled
 @Autonomous(name="Vision16626Test", group="vision")
 public class Vision16626Test extends LinearOpMode {
     public Init3BlockDetection pipeline;

@@ -1,9 +1,10 @@
 package org.firstinspires.ftc.teamcode.Robot;
 
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
-
+@Disabled
 @TeleOp(name="StateAutoTest")
 public class StateAutoTest extends LinearOpMode {
 
@@ -17,6 +18,7 @@ public class StateAutoTest extends LinearOpMode {
         waitForStart();
 
         mintyPoncho.setMode(RobotMode.RED_QUARRY_AUTO1);
+        mintyPoncho.update();
     }
 
 }
