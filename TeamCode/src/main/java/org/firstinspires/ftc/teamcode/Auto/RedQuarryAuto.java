@@ -132,6 +132,8 @@ public class RedQuarryAuto extends LinearOpMode {
         robot.update();
     }
 
+
+    //Vision code provided by Team #3939 Bolts of Steel
     static class StageSwitchingPipeline extends OpenCvPipeline
     {
         Mat yCbCrChan2Mat = new Mat();

@@ -246,7 +246,7 @@ public class MintyPancho {
             cap.setPosition(0.1);
             arm.setMode(MotorMode.AUTO);
             arm.setPower(0);
-            intake.setMaxPower(0.65);
+            intake.setMaxPower(0.7);
             claw.setMode(ClawMode.AUTO);
             lift.setMode(MotorMode.AUTO);
             drive.setPoseEstimate(new Pose2d(-13, -62.5, 0.5*Math.PI));
@@ -258,7 +258,7 @@ public class MintyPancho {
 
             drive.followTrajectorySync(
                     drive.trajectoryBuilder()
-                            .splineTo(new Pose2d(-25, -22, 0.5*Math.PI))
+                            .splineTo(new Pose2d(-26, -22, 0.5*Math.PI))
                             .build()
             );
 
@@ -276,7 +276,7 @@ public class MintyPancho {
                             .build()
             );
 
-            lopMode.sleep(250);
+            lopMode.sleep(1000);
 
             intake.setMode(IntakeMode.STOP);
             intake.update();
@@ -291,7 +291,6 @@ public class MintyPancho {
 
                         arm.intake();
 
-                        intake.setMaxPower(0.65);
                         intake.setMode(IntakeMode.PULL);
                         intake.update();
 
@@ -300,6 +299,8 @@ public class MintyPancho {
                     .back(19)
                     .build()
             );
+
+            lopMode.sleep(400);
 
             grabber.setMode(IntakeMode.PREMATCH);
             grabber.update();
@@ -317,7 +318,7 @@ public class MintyPancho {
                     .reverse().splineTo(new Pose2d(46, -40, Math.PI))
                     .addMarker(new Vector2d(7, -35), () -> {
                         claw.grab();
-                        lopMode.sleep(150);
+                        lopMode.sleep(400);
                         intake.setMode(IntakeMode.STOP);
                         intake.update();
                         arm.stack();
@@ -326,7 +327,7 @@ public class MintyPancho {
                     .build()
             );
 
-            lopMode.sleep(500);
+            lopMode.sleep(1100);
 
             claw.intake();
             lopMode.sleep(150);
@@ -351,7 +352,7 @@ public class MintyPancho {
             cap.setPosition(0.1);
             arm.setMode(MotorMode.AUTO);
             arm.setPower(0);
-            intake.setMaxPower(0.65);
+            intake.setMaxPower(0.7);
             lift.setMode(MotorMode.AUTO);
             claw.setMode(ClawMode.AUTO);
             drive.setPoseEstimate(new Pose2d(-13, -62.5, 0.5 * Math.PI));
@@ -363,7 +364,8 @@ public class MintyPancho {
 
             drive.followTrajectorySync(
                     drive.trajectoryBuilder()
-                            .splineTo(new Pose2d(-33.5, -20, 0.5*Math.PI))
+                            .splineTo(new Pose2d(-34.5, -17, 0.5*Math.PI))
+                            .forward(12)
                             .build()
             );
 
@@ -381,7 +383,7 @@ public class MintyPancho {
                             .build()
             );
 
-            lopMode.sleep(250);
+            lopMode.sleep(1000);
 
             intake.setMode(IntakeMode.STOP);
             intake.update();
@@ -406,6 +408,8 @@ public class MintyPancho {
                     .build()
             );
 
+            lopMode.sleep(400);
+
             grabber.setMode(IntakeMode.PREMATCH);
             grabber.update();
 
@@ -414,7 +418,7 @@ public class MintyPancho {
             drive.followTrajectorySync(drive.trajectoryBuilder()
                     .splineTo(new Pose2d(0, -39, Math.PI))
                     .splineTo(new Pose2d(-39, -41, Math.PI))
-                    .splineTo(new Pose2d(-61, -19, 0.5*Math.PI))
+                    .splineTo(new Pose2d(-61, -17, 0.5*Math.PI))
                     .build()
             );
 
@@ -422,7 +426,7 @@ public class MintyPancho {
                     .reverse().splineTo(new Pose2d(46, -40, Math.PI))
                     .addMarker(new Vector2d(7, -35), () -> {
                         claw.grab();
-                        lopMode.sleep(150);
+                        lopMode.sleep(400);
                         intake.setMode(IntakeMode.STOP);
                         intake.update();
                         arm.stack();
@@ -431,7 +435,7 @@ public class MintyPancho {
                     .build()
             );
 
-            lopMode.sleep(500);
+            lopMode.sleep(1100);
 
             claw.intake();
             lopMode.sleep(150);
@@ -456,7 +460,7 @@ public class MintyPancho {
             cap.setPosition(0.1);
             arm.setMode(MotorMode.AUTO);
             arm.setPower(0);
-            intake.setMaxPower(0.65);
+            intake.setMaxPower(0.7);
             lift.setMode(MotorMode.AUTO);
             claw.setMode(ClawMode.AUTO);
             drive.setPoseEstimate(new Pose2d(-13, -62.5, 0.5 * Math.PI));
@@ -468,7 +472,7 @@ public class MintyPancho {
 
             drive.followTrajectorySync(
                     drive.trajectoryBuilder()
-                            .splineTo(new Pose2d(-41, -20, 0.5 * Math.PI))
+                            .splineTo(new Pose2d(-41, -16, 0.5 * Math.PI))
                             .build()
             );
 
@@ -486,7 +490,7 @@ public class MintyPancho {
                             .build()
             );
 
-            lopMode.sleep(250);
+            lopMode.sleep(1000);
 
             intake.setMode(IntakeMode.STOP);
             intake.update();
@@ -510,6 +514,8 @@ public class MintyPancho {
                     .back(19)
                     .build()
             );
+
+            lopMode.sleep(400);
 
             grabber.setMode(IntakeMode.PREMATCH);
             grabber.update();
@@ -536,7 +542,7 @@ public class MintyPancho {
                     .reverse().splineTo(new Pose2d(49, -45, Math.PI))
                     .addMarker(new Vector2d(7, -35), () -> {
                         claw.grab();
-                        lopMode.sleep(150);
+                        lopMode.sleep(400);
                         intake.setMode(IntakeMode.STOP);
                         intake.update();
                         arm.stack();
@@ -545,7 +551,7 @@ public class MintyPancho {
                     .build()
             );
 
-            lopMode.sleep(500);
+            lopMode.sleep(1100);
 
             claw.intake();
             lopMode.sleep(150);
@@ -557,6 +563,7 @@ public class MintyPancho {
             arm.intake();
 
             drive.followTrajectorySync(drive.trajectoryBuilder()
+                    .strafeLeft(18)
                     .forward(40)
                     .build()
             );
@@ -570,7 +577,7 @@ public class MintyPancho {
                 cap.setPosition(0.1);
                 arm.setMode(MotorMode.AUTO);
                 arm.setPower(0);
-                intake.setMaxPower(0.65);
+                intake.setMaxPower(0.7);
                 lift.setMode(MotorMode.AUTO);
                 claw.setMode(ClawMode.AUTO);
                 drive.setPoseEstimate(new Pose2d(-13, 62.5, 1.5 * Math.PI));
@@ -583,6 +590,7 @@ public class MintyPancho {
                 drive.followTrajectorySync(
                         drive.trajectoryBuilder()
                                 .splineTo(new Pose2d(-25, 22, 1.5*Math.PI))
+                                .forward(12)
                                 .build()
                 );
 
@@ -600,7 +608,7 @@ public class MintyPancho {
                                 .build()
                 );
 
-                lopMode.sleep(250);
+                lopMode.sleep(1000);
 
                 intake.setMode(IntakeMode.STOP);
                 intake.update();
@@ -624,6 +632,7 @@ public class MintyPancho {
                         .back(19)
                         .build()
                 );
+                lopMode.sleep(400);
 
                 grabber.setMode(IntakeMode.PREMATCH);
                 grabber.update();
@@ -633,7 +642,7 @@ public class MintyPancho {
                 drive.followTrajectorySync(drive.trajectoryBuilder()
                         .splineTo(new Pose2d(0, 39, Math.PI))
                         .splineTo(new Pose2d(-39, 41, Math.PI))
-                        .splineTo(new Pose2d(-50, 19, 1.5*Math.PI))
+                        .splineTo(new Pose2d(-52, 19, 1.5*Math.PI))
                         .build()
                 );
 
@@ -641,7 +650,7 @@ public class MintyPancho {
                         .reverse().splineTo(new Pose2d(46, 40, Math.PI))
                         .addMarker(new Vector2d(7, 35), () -> {
                             claw.grab();
-                            lopMode.sleep(150);
+                            lopMode.sleep(400);
                             intake.setMode(IntakeMode.STOP);
                             intake.update();
                             arm.stack();
@@ -650,7 +659,7 @@ public class MintyPancho {
                         .build()
                 );
 
-                lopMode.sleep(500);
+                lopMode.sleep(1100);
 
                 claw.intake();
                 lopMode.sleep(150);
@@ -666,6 +675,7 @@ public class MintyPancho {
                         .forward(40)
                         .build()
                 );
+                break;
             }
         }
 
@@ -674,7 +684,7 @@ public class MintyPancho {
                 cap.setPosition(0.1);
                 arm.setMode(MotorMode.AUTO);
                 arm.setPower(0);
-                intake.setMaxPower(0.65);
+                intake.setMaxPower(0.7);
                 lift.setMode(MotorMode.AUTO);
                 claw.setMode(ClawMode.AUTO);
                 drive.setPoseEstimate(new Pose2d(-13, 62.5, 1.5 * Math.PI));
@@ -686,7 +696,8 @@ public class MintyPancho {
 
                 drive.followTrajectorySync(
                         drive.trajectoryBuilder()
-                                .splineTo(new Pose2d(-35, 20, 1.5*Math.PI))
+                                .splineTo(new Pose2d(-32, 16, 1.5*Math.PI))
+                                .forward(12)
                                 .build()
                 );
 
@@ -704,7 +715,7 @@ public class MintyPancho {
                                 .build()
                 );
 
-                lopMode.sleep(250);
+                lopMode.sleep(1000);
 
                 intake.setMode(IntakeMode.STOP);
                 intake.update();
@@ -728,6 +739,8 @@ public class MintyPancho {
                         .build()
                 );
 
+                lopMode.sleep(400);
+
                 grabber.setMode(IntakeMode.PREMATCH);
                 grabber.update();
 
@@ -736,7 +749,7 @@ public class MintyPancho {
                 drive.followTrajectorySync(drive.trajectoryBuilder()
                         .splineTo(new Pose2d(0, 39, Math.PI))
                         .splineTo(new Pose2d(-39, 41, Math.PI))
-                        .splineTo(new Pose2d(-55, 19, 1.5*Math.PI))
+                        .splineTo(new Pose2d(-60, 19, 1.5*Math.PI))
                         .build()
                 );
 
@@ -744,7 +757,7 @@ public class MintyPancho {
                         .reverse().splineTo(new Pose2d(46, 40, Math.PI))
                         .addMarker(new Vector2d(7, 35), () -> {
                             claw.grab();
-                            lopMode.sleep(150);
+                            lopMode.sleep(400);
                             intake.setMode(IntakeMode.STOP);
                             intake.update();
                             arm.stack();
@@ -753,7 +766,7 @@ public class MintyPancho {
                         .build()
                 );
 
-                lopMode.sleep(500);
+                lopMode.sleep(1100);
 
                 claw.intake();
                 lopMode.sleep(150);
@@ -769,6 +782,7 @@ public class MintyPancho {
                         .forward(40)
                         .build()
                 );
+                break;
             }
         }
 
@@ -777,7 +791,7 @@ public class MintyPancho {
                 cap.setPosition(0.1);
                 arm.setMode(MotorMode.AUTO);
                 arm.setPower(0);
-                intake.setMaxPower(0.65);
+                intake.setMaxPower(0.7);
                 claw.setMode(ClawMode.AUTO);
                 lift.setMode(MotorMode.AUTO);
                 drive.setPoseEstimate(new Pose2d(-13, 62.5, 1.5 * Math.PI));
@@ -789,7 +803,7 @@ public class MintyPancho {
 
                 drive.followTrajectorySync(
                         drive.trajectoryBuilder()
-                                .splineTo(new Pose2d(-41, 20, 1.5*Math.PI))
+                                .splineTo(new Pose2d(-43, 16, 1.5*Math.PI))
                                 .build()
                 );
 
@@ -807,7 +821,7 @@ public class MintyPancho {
                                 .build()
                 );
 
-                lopMode.sleep(250);
+                lopMode.sleep(1000);
 
                 intake.setMode(IntakeMode.STOP);
                 intake.update();
@@ -830,6 +844,8 @@ public class MintyPancho {
                         .back(19)
                         .build()
                 );
+
+                lopMode.sleep(400);
 
                 grabber.setMode(IntakeMode.PREMATCH);
                 grabber.update();
@@ -850,7 +866,7 @@ public class MintyPancho {
                         .reverse().splineTo(new Pose2d(49, 45, Math.PI))
                         .addMarker(new Vector2d(7, 35), () -> {
                             claw.grab();
-                            lopMode.sleep(150);
+                            lopMode.sleep(400);
                             intake.setMode(IntakeMode.STOP);
                             intake.update();
                             arm.stack();
@@ -859,7 +875,7 @@ public class MintyPancho {
                         .build()
                 );
 
-                lopMode.sleep(500);
+                lopMode.sleep(1100);
 
                 claw.intake();
                 lopMode.sleep(150);
@@ -875,6 +891,7 @@ public class MintyPancho {
                         .forward(40)
                         .build()
                 );
+                break;
             }
         }
 

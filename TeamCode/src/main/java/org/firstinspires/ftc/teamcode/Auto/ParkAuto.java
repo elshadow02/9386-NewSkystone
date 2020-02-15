@@ -24,7 +24,7 @@ import java.util.List;
 
 //import org.firstinspires.ftc.teamcode.VuforiaTesting.VuforiaImpPlus;
 
-@Autonomous(name="RedQuarryAuto", group ="Concept")
+@Autonomous(name="Park", group ="Concept")
 public class ParkAuto extends LinearOpMode {
 
     //EEHardware bot = new EEHardware();

@@ -1,22 +1,22 @@
 package org.firstinspires.ftc.teamcode.Robot
 
-public enum class MotorMode {
+enum class MotorMode {
     RUN_TO_POSITION, CONTROLLED, STOP, PREMATCH, AUTO
 }
 
-public enum class DriveMode{
+enum class DriveMode{
     MECANUM, TANK, COOL_MECANUM, TURTLE_SPEED, STOP
 }
 
-public enum class RobotMode{
+enum class RobotMode{
     TURTLE_MODE, BEAST_MODE, BLUE_QUARRY_AUTO1, RED_QUARRY_AUTO1, RED_QUARRYAUTO2, RED_QUARRY_AUTO3,
     BLUE_FOUNDATION, RED_FOUNDATION, BLUE_QUARRY_AUTO2, BLUE_QUARRY_AUTO3, PARK,STOP
 }
 
-public enum class IntakeMode{
+enum class IntakeMode{
     PREMATCH, TELEOP, OUT, STOP, PULL, PUSH
 }
 
-public enum class ClawMode{
+enum class ClawMode{
     INTAKE, GRAB, STOP, AUTO, TELEOP
 }
