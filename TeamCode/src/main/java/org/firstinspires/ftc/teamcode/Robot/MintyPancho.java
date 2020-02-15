@@ -93,6 +93,7 @@ public class MintyPancho {
                 grabber.setMode(IntakeMode.TELEOP);
 
                 if(!newChanged && redSide){
+                    cap.setPosition(0.1);
                     arm.setMode(MotorMode.CONTROLLED);
                     lift.setMode(MotorMode.CONTROLLED);
                     newChanged = true;
@@ -101,12 +102,13 @@ public class MintyPancho {
                 if(!newChanged && !redSide){
                     arm.setMode(MotorMode.CONTROLLED);
                     lift.setMode(MotorMode.CONTROLLED);
+                    cap.setPosition(0.1);
                     newChanged = true;
                 }
                 break;
             case BEAST_MODE:
                 arm.setMaxPower(0.55);
-                lift.setMaxPower(0.8);
+                //lift.setMaxPower(0.8);
                 drive.setDriveMode(DriveMode.MECANUM);
                 //arm.setMode(MotorMode.CONTROLLED);
                 intake.setMode(IntakeMode.TELEOP);
@@ -118,6 +120,7 @@ public class MintyPancho {
                     arm.setMode(MotorMode.CONTROLLED);
                     lift.setMode(MotorMode.CONTROLLED);
                     arm.setRedSide(true);
+                    cap.setPosition(0.1);
                     newChanged = true;
                 }
 
@@ -125,6 +128,7 @@ public class MintyPancho {
                     arm.setMode(MotorMode.CONTROLLED);
                     lift.setMode(MotorMode.CONTROLLED);
                     arm.setRedSide(false);
+                    cap.setPosition(0.1);
                     newChanged = true;
                 }
                 break;
@@ -151,6 +155,9 @@ public class MintyPancho {
                 break;
             case BLUE_FOUNDATION:
                 blueFoundation();
+                break;
+            case PARK:
+                park();
                 break;
         }
 
@@ -236,9 +243,10 @@ public class MintyPancho {
 
     private void redQuarryPath1(){
         while(lopMode.opModeIsActive()) {
+            cap.setPosition(0.1);
             arm.setMode(MotorMode.AUTO);
             arm.setPower(0);
-            intake.setMaxPower(1.0);
+            intake.setMaxPower(0.65);
             claw.setMode(ClawMode.AUTO);
             lift.setMode(MotorMode.AUTO);
             drive.setPoseEstimate(new Pose2d(-13, -62.5, 0.5*Math.PI));
@@ -273,20 +281,17 @@ public class MintyPancho {
             intake.setMode(IntakeMode.STOP);
             intake.update();
 
-            arm.stack();
+            arm.autoStack();
 
             drive.followTrajectorySync(drive.trajectoryBuilder()
                     .splineTo(new Pose2d(27, -45, Math.PI))
                     .addMarker(() -> {
-                        lopMode.sleep(100);
+                        lopMode.sleep(200);
                         claw.intake();
 
                         arm.intake();
 
-                        grabber.setMode(IntakeMode.PREMATCH);
-                        grabber.update();
-
-                        intake.setMaxPower(0.6);
+                        intake.setMaxPower(0.65);
                         intake.setMode(IntakeMode.PULL);
                         intake.update();
 
@@ -296,7 +301,10 @@ public class MintyPancho {
                     .build()
             );
 
-            lopMode.sleep(150);
+            grabber.setMode(IntakeMode.PREMATCH);
+            grabber.update();
+
+            lopMode.sleep(400);
 
             drive.followTrajectorySync(drive.trajectoryBuilder()
                     .splineTo(new Pose2d(0, -39, Math.PI))
@@ -318,41 +326,16 @@ public class MintyPancho {
                     .build()
             );
 
-            lopMode.sleep(200);
+            lopMode.sleep(500);
 
             claw.intake();
             lopMode.sleep(150);
             arm.intake();
             lopMode.sleep(250);
-            intake.setMode(IntakeMode.PULL);
-            intake.update();claw.intake();
-            arm.intake();
-            intake.setMaxPower(0.6);
-            intake.setMode(IntakeMode.PULL);
+            intake.setMode(IntakeMode.STOP);
             intake.update();
-
-            drive.followTrajectorySync(drive.trajectoryBuilder()
-                    .splineTo(new Pose2d(-31, -10, 0.5*Math.PI))
-                    .build()
-            );
-
-            drive.followTrajectorySync(drive.trajectoryBuilder()
-                    .reverse().splineTo(new Pose2d(48, -40, Math.PI))
-                    .addMarker(new Vector2d(0, -32), () -> {
-                        claw.grab();
-                        lopMode.sleep(150);
-                        intake.setMode(IntakeMode.STOP);
-                        intake.update();
-                        arm.stack();
-                        return Unit.INSTANCE;
-                    })
-                    .build()
-            );
-
             claw.intake();
-            lopMode.sleep(250);
             arm.intake();
-            lopMode.sleep(250);
 
             drive.followTrajectorySync(drive.trajectoryBuilder()
                     .forward(40)
@@ -365,9 +348,10 @@ public class MintyPancho {
 
     private void redQuarryPath2(){
         while(lopMode.opModeIsActive()) {
+            cap.setPosition(0.1);
             arm.setMode(MotorMode.AUTO);
             arm.setPower(0);
-            intake.setMaxPower(1.0);
+            intake.setMaxPower(0.65);
             lift.setMode(MotorMode.AUTO);
             claw.setMode(ClawMode.AUTO);
             drive.setPoseEstimate(new Pose2d(-13, -62.5, 0.5 * Math.PI));
@@ -402,17 +386,16 @@ public class MintyPancho {
             intake.setMode(IntakeMode.STOP);
             intake.update();
 
-            arm.stack();
+            arm.autoStack();
 
             drive.followTrajectorySync(drive.trajectoryBuilder()
                     .splineTo(new Pose2d(27, -45, Math.PI))
                     .addMarker(() -> {
+                        lopMode.sleep(200);
+
                         claw.intake();
 
                         arm.intake();
-
-                        grabber.setMode(IntakeMode.PREMATCH);
-                        grabber.update();
 
                         intake.setMode(IntakeMode.PULL);
                         intake.update();
@@ -423,7 +406,10 @@ public class MintyPancho {
                     .build()
             );
 
-            lopMode.sleep(200);
+            grabber.setMode(IntakeMode.PREMATCH);
+            grabber.update();
+
+            lopMode.sleep(400);
 
             drive.followTrajectorySync(drive.trajectoryBuilder()
                     .splineTo(new Pose2d(0, -39, Math.PI))
@@ -445,38 +431,16 @@ public class MintyPancho {
                     .build()
             );
 
+            lopMode.sleep(500);
+
             claw.intake();
             lopMode.sleep(150);
             arm.intake();
             lopMode.sleep(250);
-            intake.setMode(IntakeMode.PULL);
-            intake.update();claw.intake();
-            arm.intake();
-            intake.setMode(IntakeMode.PULL);
+            intake.setMode(IntakeMode.STOP);
             intake.update();
-
-            drive.followTrajectorySync(drive.trajectoryBuilder()
-                    .splineTo(new Pose2d(-25, -13, 0.5*Math.PI))
-                    .build()
-            );
-
-            drive.followTrajectorySync(drive.trajectoryBuilder()
-                    .reverse().splineTo(new Pose2d(48, -40, Math.PI))
-                    .addMarker(new Vector2d(0, -32), () -> {
-                        claw.grab();
-                        lopMode.sleep(150);
-                        intake.setMode(IntakeMode.STOP);
-                        intake.update();
-                        arm.stack();
-                        return Unit.INSTANCE;
-                    })
-                    .build()
-            );
-
             claw.intake();
-            lopMode.sleep(250);
             arm.intake();
-            lopMode.sleep(250);
 
             drive.followTrajectorySync(drive.trajectoryBuilder()
                     .forward(40)
@@ -489,9 +453,10 @@ public class MintyPancho {
 
     private void redQuarryPath3() {
         while (lopMode.opModeIsActive()) {
+            cap.setPosition(0.1);
             arm.setMode(MotorMode.AUTO);
             arm.setPower(0);
-            intake.setMaxPower(1.0);
+            intake.setMaxPower(0.65);
             lift.setMode(MotorMode.AUTO);
             claw.setMode(ClawMode.AUTO);
             drive.setPoseEstimate(new Pose2d(-13, -62.5, 0.5 * Math.PI));
@@ -526,17 +491,16 @@ public class MintyPancho {
             intake.setMode(IntakeMode.STOP);
             intake.update();
 
-            arm.stack();
+            arm.autoStack();
 
             drive.followTrajectorySync(drive.trajectoryBuilder()
                     .splineTo(new Pose2d(27, -45, Math.PI))
                     .addMarker(() -> {
+                        lopMode.sleep(200);
+
                         claw.intake();
 
                         arm.intake();
-
-                        grabber.setMode(IntakeMode.PREMATCH);
-                        grabber.update();
 
                         intake.setMode(IntakeMode.PULL);
                         intake.update();
@@ -547,7 +511,10 @@ public class MintyPancho {
                     .build()
             );
 
-            lopMode.sleep(200);
+            grabber.setMode(IntakeMode.PREMATCH);
+            grabber.update();
+
+            lopMode.sleep(400);
 
 //        drive.followTrajectorySync(drive.trajectoryBuilder()
 //                .splineTo(new Pose2d(0, -39, Math.PI))
@@ -578,39 +545,16 @@ public class MintyPancho {
                     .build()
             );
 
+            lopMode.sleep(500);
+
             claw.intake();
             lopMode.sleep(150);
             arm.intake();
             lopMode.sleep(250);
-            intake.setMode(IntakeMode.PULL);
+            intake.setMode(IntakeMode.STOP);
             intake.update();
             claw.intake();
             arm.intake();
-            intake.setMode(IntakeMode.PULL);
-            intake.update();
-
-            drive.followTrajectorySync(drive.trajectoryBuilder()
-                    .splineTo(new Pose2d(-31, -13, 0.5 * Math.PI))
-                    .build()
-            );
-
-            drive.followTrajectorySync(drive.trajectoryBuilder()
-                    .reverse().splineTo(new Pose2d(48, -40, Math.PI))
-                    .addMarker(new Vector2d(0, -32), () -> {
-                        claw.grab();
-                        lopMode.sleep(150);
-                        intake.setMode(IntakeMode.STOP);
-                        intake.update();
-                        arm.stack();
-                        return Unit.INSTANCE;
-                    })
-                    .build()
-            );
-
-            claw.intake();
-            lopMode.sleep(250);
-            arm.intake();
-            lopMode.sleep(250);
 
             drive.followTrajectorySync(drive.trajectoryBuilder()
                     .forward(40)
@@ -623,9 +567,10 @@ public class MintyPancho {
 
         private void blueQuarryPath1(){
             while(lopMode.opModeIsActive()) {
+                cap.setPosition(0.1);
                 arm.setMode(MotorMode.AUTO);
                 arm.setPower(0);
-                intake.setMaxPower(1.0);
+                intake.setMaxPower(0.65);
                 lift.setMode(MotorMode.AUTO);
                 claw.setMode(ClawMode.AUTO);
                 drive.setPoseEstimate(new Pose2d(-13, 62.5, 1.5 * Math.PI));
@@ -660,17 +605,16 @@ public class MintyPancho {
                 intake.setMode(IntakeMode.STOP);
                 intake.update();
 
-                arm.stack();
+                arm.autoStack();
 
                 drive.followTrajectorySync(drive.trajectoryBuilder()
                         .splineTo(new Pose2d(27, 45, Math.PI))
                         .addMarker(() -> {
+                            lopMode.sleep(200);
+
                             claw.intake();
 
                             arm.intake();
-
-                            grabber.setMode(IntakeMode.PREMATCH);
-                            grabber.update();
 
                             intake.setMode(IntakeMode.PULL);
                             intake.update();
@@ -681,7 +625,10 @@ public class MintyPancho {
                         .build()
                 );
 
-                lopMode.sleep(200);
+                grabber.setMode(IntakeMode.PREMATCH);
+                grabber.update();
+
+                lopMode.sleep(400);
 
                 drive.followTrajectorySync(drive.trajectoryBuilder()
                         .splineTo(new Pose2d(0, 39, Math.PI))
@@ -703,38 +650,17 @@ public class MintyPancho {
                         .build()
                 );
 
+                lopMode.sleep(500);
+
                 claw.intake();
                 lopMode.sleep(150);
                 arm.intake();
                 lopMode.sleep(250);
-                intake.setMode(IntakeMode.PULL);
+                intake.setMode(IntakeMode.STOP);
                 intake.update();claw.intake();
                 arm.intake();
-                intake.setMode(IntakeMode.PULL);
+                intake.setMode(IntakeMode.STOP);
                 intake.update();
-
-                drive.followTrajectorySync(drive.trajectoryBuilder()
-                        .splineTo(new Pose2d(-31, 10, 1.5*Math.PI))
-                        .build()
-                );
-
-                drive.followTrajectorySync(drive.trajectoryBuilder()
-                        .reverse().splineTo(new Pose2d(48, 40, Math.PI))
-                        .addMarker(new Vector2d(0, 32), () -> {
-                            claw.grab();
-                            lopMode.sleep(150);
-                            intake.setMode(IntakeMode.STOP);
-                            intake.update();
-                            arm.stack();
-                            return Unit.INSTANCE;
-                        })
-                        .build()
-                );
-
-                claw.intake();
-                lopMode.sleep(250);
-                arm.intake();
-                lopMode.sleep(250);
 
                 drive.followTrajectorySync(drive.trajectoryBuilder()
                         .forward(40)
@@ -745,9 +671,10 @@ public class MintyPancho {
 
         private void blueQuarryPath2(){
             while(lopMode.opModeIsActive()) {
+                cap.setPosition(0.1);
                 arm.setMode(MotorMode.AUTO);
                 arm.setPower(0);
-                intake.setMaxPower(1.0);
+                intake.setMaxPower(0.65);
                 lift.setMode(MotorMode.AUTO);
                 claw.setMode(ClawMode.AUTO);
                 drive.setPoseEstimate(new Pose2d(-13, 62.5, 1.5 * Math.PI));
@@ -782,17 +709,15 @@ public class MintyPancho {
                 intake.setMode(IntakeMode.STOP);
                 intake.update();
 
-                arm.stack();
+                arm.autoStack();
 
                 drive.followTrajectorySync(drive.trajectoryBuilder()
                         .splineTo(new Pose2d(27, 45, Math.PI))
                         .addMarker(() -> {
+                            lopMode.sleep(200);
                             claw.intake();
 
                             arm.intake();
-
-                            grabber.setMode(IntakeMode.PREMATCH);
-                            grabber.update();
 
                             intake.setMode(IntakeMode.PULL);
                             intake.update();
@@ -803,7 +728,10 @@ public class MintyPancho {
                         .build()
                 );
 
-                lopMode.sleep(200);
+                grabber.setMode(IntakeMode.PREMATCH);
+                grabber.update();
+
+                lopMode.sleep(400);
 
                 drive.followTrajectorySync(drive.trajectoryBuilder()
                         .splineTo(new Pose2d(0, 39, Math.PI))
@@ -825,38 +753,17 @@ public class MintyPancho {
                         .build()
                 );
 
+                lopMode.sleep(500);
+
                 claw.intake();
                 lopMode.sleep(150);
                 arm.intake();
                 lopMode.sleep(250);
-                intake.setMode(IntakeMode.PULL);
+                intake.setMode(IntakeMode.STOP);
                 intake.update();claw.intake();
                 arm.intake();
-                intake.setMode(IntakeMode.PULL);
+                intake.setMode(IntakeMode.STOP);
                 intake.update();
-
-                drive.followTrajectorySync(drive.trajectoryBuilder()
-                        .splineTo(new Pose2d(-23, 13, 1.5*Math.PI))
-                        .build()
-                );
-
-                drive.followTrajectorySync(drive.trajectoryBuilder()
-                        .reverse().splineTo(new Pose2d(48, 40, Math.PI))
-                        .addMarker(new Vector2d(0, 32), () -> {
-                            claw.grab();
-                            lopMode.sleep(150);
-                            intake.setMode(IntakeMode.STOP);
-                            intake.update();
-                            arm.stack();
-                            return Unit.INSTANCE;
-                        })
-                        .build()
-                );
-
-                claw.intake();
-                lopMode.sleep(250);
-                arm.intake();
-                lopMode.sleep(250);
 
                 drive.followTrajectorySync(drive.trajectoryBuilder()
                         .forward(40)
@@ -867,9 +774,10 @@ public class MintyPancho {
 
         public void blueQuarryPath3(){
             while(lopMode.opModeIsActive()) {
+                cap.setPosition(0.1);
                 arm.setMode(MotorMode.AUTO);
                 arm.setPower(0);
-                intake.setMaxPower(1.0);
+                intake.setMaxPower(0.65);
                 claw.setMode(ClawMode.AUTO);
                 lift.setMode(MotorMode.AUTO);
                 drive.setPoseEstimate(new Pose2d(-13, 62.5, 1.5 * Math.PI));
@@ -904,17 +812,15 @@ public class MintyPancho {
                 intake.setMode(IntakeMode.STOP);
                 intake.update();
 
-                arm.stack();
+                arm.autoStack();
 
                 drive.followTrajectorySync(drive.trajectoryBuilder()
                         .splineTo(new Pose2d(27, 45, Math.PI))
                         .addMarker(() -> {
+                            lopMode.sleep(200);
                             claw.intake();
 
                             arm.intake();
-
-                            grabber.setMode(IntakeMode.PREMATCH);
-                            grabber.update();
 
                             intake.setMode(IntakeMode.PULL);
                             intake.update();
@@ -925,13 +831,10 @@ public class MintyPancho {
                         .build()
                 );
 
-                lopMode.sleep(200);
+                grabber.setMode(IntakeMode.PREMATCH);
+                grabber.update();
 
-//        drive.followTrajectorySync(drive.trajectoryBuilder()
-//                .splineTo(new Pose2d(0, -39, Math.PI))
-//                .splineTo(new Pose2d(-66, -19, 0.8*Math.PI))
-//                .build()
-//        );
+                lopMode.sleep(400);
 
                 drive.followTrajectorySync(drive.trajectoryBuilder()
                         .splineTo(new Pose2d(0, 39, Math.PI))
@@ -956,6 +859,8 @@ public class MintyPancho {
                         .build()
                 );
 
+                lopMode.sleep(500);
+
                 claw.intake();
                 lopMode.sleep(150);
                 arm.intake();
@@ -967,32 +872,15 @@ public class MintyPancho {
                 intake.update();
 
                 drive.followTrajectorySync(drive.trajectoryBuilder()
-                        .splineTo(new Pose2d(-31, 13, 1.5*Math.PI))
-                        .build()
-                );
-
-                drive.followTrajectorySync(drive.trajectoryBuilder()
-                        .reverse().splineTo(new Pose2d(48, 40, Math.PI))
-                        .addMarker(new Vector2d(0, 32), () -> {
-                            claw.grab();
-                            lopMode.sleep(150);
-                            intake.setMode(IntakeMode.STOP);
-                            intake.update();
-                            arm.stack();
-                            return Unit.INSTANCE;
-                        })
-                        .build()
-                );
-
-                claw.intake();
-                lopMode.sleep(250);
-                arm.intake();
-                lopMode.sleep(250);
-
-                drive.followTrajectorySync(drive.trajectoryBuilder()
                         .forward(40)
                         .build()
                 );
             }
+        }
+
+        private void park(){
+            drive.followTrajectorySync(drive.trajectoryBuilder()
+                    .forward(40)
+                    .build());
         }
     }

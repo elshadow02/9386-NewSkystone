@@ -82,6 +82,10 @@ public class Arm {
         setAngle(180);
     }
 
+    public void autoStack(){
+        setAngle(220);
+    }
+
     public boolean isBusy(){
         return arm.isBusy();
     }
